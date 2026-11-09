@@ -37,9 +37,8 @@
         .menu-card-btn.active { background: #eff6ff; border-color: var(--primary-light); color: var(--primary); box-shadow: 0 4px 6px rgba(59,130,246,0.15); }
         .menu-card-btn span.icon { font-size: 1.3rem; }
 
-        /* SECCIONES (HOJAS INDEPENDIENTES) */
-        .section-view { display: none !important; }
-        .section-view.active-view { display: block !important; }
+        /* SECCIONES OCULTAS POR DEFECTO */
+        .calc-section { display: none; }
 
         .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #e2e8f0; }
         .card h2 { font-size: 1.15rem; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
@@ -77,23 +76,23 @@
         <p style="font-weight: 500; opacity: 0.95;">Desarrollo Comercial e Innovación | Espumlátex S.A.</p>
     </header>
 
-    <!-- MENÚ DE PESTAÑAS / SELECCIÓN -->
+    <!-- MENÚ DE PESTAÑAS -->
     <div class="dashboard-menu">
         <h3>Seleccione el módulo de cálculo:</h3>
         <div class="menu-grid">
-            <button id="btn_sec_relaciones" class="menu-card-btn active" onclick="switchSection('sec_relaciones')">
+            <button id="btn_sec_relaciones" class="menu-card-btn active" onclick="mostrarSeccion('sec_relaciones')">
                 <span class="icon">⚖️</span>
                 <span>Relación y Dosificación</span>
             </button>
-            <button id="btn_sec_panel" class="menu-card-btn" onclick="switchSection('sec_panel')">
+            <button id="btn_sec_panel" class="menu-card-btn" onclick="mostrarSeccion('sec_panel')">
                 <span class="icon">🧱</span>
                 <span>Panel Único y Calibración</span>
             </button>
-            <button id="btn_sec_furgones" class="menu-card-btn" onclick="switchSection('sec_furgones')">
+            <button id="btn_sec_furgones" class="menu-card-btn" onclick="mostrarSeccion('sec_furgones')">
                 <span class="icon">🚚</span>
                 <span>Furgones y Cavas</span>
             </button>
-            <button id="btn_sec_tuberias" class="menu-card-btn" onclick="switchSection('sec_tuberias')">
+            <button id="btn_sec_tuberias" class="menu-card-btn" onclick="mostrarSeccion('sec_tuberias')">
                 <span class="icon">🧪</span>
                 <span>Aislamiento Tuberías</span>
             </button>
@@ -101,7 +100,7 @@
     </div>
 
     <!-- SECCIÓN 1: RELACIÓN Y DOSIFICACIÓN -->
-    <div id="sec_relaciones" class="section-view active-view card">
+    <div id="sec_relaciones" class="calc-section card" style="display: block;">
         <h2><span>1. Relación de Mezcla y Dosificación</span></h2>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Seleccione un preset o modifique cualquier campo para calcular los demás automáticamente.</p>
         
@@ -182,7 +181,7 @@
     </div>
 
     <!-- SECCIÓN 2: PANEL INDIVIDUAL Y CALIBRACIÓN -->
-    <div id="sec_panel" class="section-view card">
+    <div id="sec_panel" class="calc-section card">
         <h2><span>2. Panel Único y Calibración de Máquina</span></h2>
         <p class="note">Ideal para inyectar una sola pared/panel o ajustar el tiempo de disparo en máquina según el caudal.</p>
         
@@ -273,7 +272,7 @@
     </div>
 
     <!-- SECCIÓN 3: FURGONES / Cavas -->
-    <div id="sec_furgones" class="section-view card">
+    <div id="sec_furgones" class="calc-section card">
         <h2><span>3. Furgones y Cavas Térmicas</span></h2>
         
         <div class="diagram-card">
@@ -388,7 +387,7 @@
     </div>
 
     <!-- SECCIÓN 4: TUBERÍAS -->
-    <div id="sec_tuberias" class="section-view card">
+    <div id="sec_tuberias" class="calc-section card">
         <h2><span>4. Aislamiento de Tuberías</span></h2>
         
         <div class="diagram-card">
@@ -399,11 +398,11 @@
                 
                 <line x1="75" y1="90" x2="145" y1="90" stroke="#0f172a" stroke-width="1.5" stroke-dasharray="3"/>
                 <line x1="75" y1="85" x2="75" y2="95" stroke="#0f172a" stroke-width="1.5"/>
-                <line x1="145" y1="85" x2="145" y2="95" stroke="#0f172a" stroke-width="1.5"/>
+                <line x1="145" y1="85" x2="145" y1="95" stroke="#0f172a" stroke-width="1.5"/>
                 <text x="110" y="83" font-size="10" font-weight="bold" fill="#0f172a" text-anchor="middle">Diámetro Tubería (Ø int)</text>
                 
                 <line x1="145" y1="90" x2="180" y1="90" stroke="#dc2626" stroke-width="2"/>
-                <line x1="180" y1="83" x2="180" y2="97" stroke="#dc2626" stroke-width="2"/>
+                <line x1="180" y1="83" x2="180" y1="97" stroke="#dc2626" stroke-width="2"/>
                 <text x="162" y="80" font-size="10" font-weight="bold" fill="#dc2626" text-anchor="middle">Espesor (e)</text>
 
                 <path d="M110,20 L270,20 A70,70 0 0,1 270,160 L110,160" fill="none" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4"/>
@@ -472,15 +471,19 @@
 </div>
 
 <script>
-    function switchSection(sectionId) {
-        let views = document.querySelectorAll('.section-view');
-        views.forEach(v => v.classList.remove('active-view'));
+    function mostrarSeccion(idSeccion) {
+        var secciones = document.querySelectorAll('.calc-section');
+        secciones.forEach(function(sec) {
+            sec.style.display = 'none';
+        });
 
-        let buttons = document.querySelectorAll('.menu-card-btn');
-        buttons.forEach(b => b.classList.remove('active'));
+        var botones = document.querySelectorAll('.menu-card-btn');
+        botones.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
 
-        document.getElementById(sectionId).classList.add('active-view');
-        document.getElementById('btn_' + sectionId).classList.add('active');
+        document.getElementById(idSeccion).style.display = 'block';
+        document.getElementById('btn_' + idSeccion).classList.add('active');
     }
 
     function setRelationParts(pol, iso) {
@@ -643,3 +646,87 @@
 
     function calcFurgon() {
         let largo = parseFloat(document.getElementById('f_largo').value) || 0;
+        let alto = parseFloat(document.getElementById('f_alto').value) || 0;
+        let ancho = parseFloat(document.getElementById('f_ancho').value) || 0;
+        let espesor = parseFloat(document.getElementById('f_espesor').value) || 0;
+        let densCub = parseFloat(document.getElementById('f_dens_cub').value) || 0;
+
+        let { p, i } = getParts();
+        let totalParts = p + i;
+
+        let volParedesLargas = 2 * (largo * alto * espesor);
+        let volPisoTecho = 2 * (largo * ancho * espesor);
+        let volFrontal = ancho * alto * espesor;
+        let volStruct = volParedesLargas + volPisoTecho + volFrontal;
+        let masaStruct = volStruct * densCub;
+
+        let polStruct = totalParts > 0 ? (p / totalParts) * masaStruct : 0;
+        let isoStruct = totalParts > 0 ? (i / totalParts) * masaStruct : 0;
+
+        let volPuertas = ancho * alto * espesor;
+        let masaPuertas = volPuertas * densCub;
+
+        let polPuertas = totalParts > 0 ? (p / totalParts) * masaPuertas : 0;
+        let isoPuertas = totalParts > 0 ? (i / totalParts) * masaPuertas : 0;
+
+        let volTotal = volStruct + volPuertas;
+        let masaTotal = masaStruct + masaPuertas;
+
+        let polTotal = totalParts > 0 ? (p / totalParts) * masaTotal : 0;
+        let isoTotal = totalParts > 0 ? (i / totalParts) * masaTotal : 0;
+
+        document.getElementById('f_vol_struct').innerText = volStruct.toFixed(4) + " m³";
+        document.getElementById('f_masa_struct').innerText = masaStruct.toFixed(2) + " kg";
+        document.getElementById('f_poliol_struct').innerText = polStruct.toFixed(2) + " kg";
+        document.getElementById('f_iso_struct').innerText = isoStruct.toFixed(2) + " kg";
+
+        document.getElementById('f_vol_puertas').innerText = volPuertas.toFixed(4) + " m³";
+        document.getElementById('f_masa_puertas').innerText = masaPuertas.toFixed(2) + " kg";
+        document.getElementById('f_poliol_puertas').innerText = polPuertas.toFixed(2) + " kg";
+        document.getElementById('f_iso_puertas').innerText = isoPuertas.toFixed(2) + " kg";
+
+        document.getElementById('f_vol_total').innerText = volTotal.toFixed(4) + " m³";
+        document.getElementById('f_masa_total').innerText = masaTotal.toFixed(2) + " kg";
+        document.getElementById('f_poliol_kg').innerText = polTotal.toFixed(2) + " kg";
+        document.getElementById('f_iso_kg').innerText = isoTotal.toFixed(2) + " kg";
+    }
+
+    function calcTuberia() {
+        let long = parseFloat(document.getElementById('t_long').value) || 0;
+        let diamPulg = parseFloat(document.getElementById('t_diam').value) || 0;
+        let espPulg = parseFloat(document.getElementById('t_esp').value) || 0;
+        let dens = parseFloat(document.getElementById('t_dens').value) || 0;
+
+        let diamCm = diamPulg * 2.54;
+        let diamMetros = diamPulg * 0.0254;
+        document.getElementById('t_diam_conv').innerText = "= " + diamCm.toFixed(2) + " cm = " + diamMetros.toFixed(4) + " m";
+
+        let espCm = espPulg * 2.54;
+        let espMetros = espPulg * 0.0254;
+        document.getElementById('t_esp_conv').innerText = "= " + espCm.toFixed(2) + " cm = " + espMetros.toFixed(4) + " m";
+
+        let diamExtMetros = diamMetros + (2 * espMetros);
+        document.getElementById('t_diam_ext_total').innerText = (diamExtMetros * 39.3701).toFixed(2) + " pulg (" + diamExtMetros.toFixed(4) + " m)";
+
+        let rInt = diamMetros / 2;
+        let rExt = diamExtMetros / 2;
+        let volAnulo = Math.PI * (Math.pow(rExt, 2) - Math.pow(rInt, 2)) * long;
+        let masaTotal = volAnulo * dens;
+
+        let { p, i } = getParts();
+        let totalParts = p + i;
+        let pol = totalParts > 0 ? (p / totalParts) * masaTotal : 0;
+        let iso = totalParts > 0 ? (i / totalParts) * masaTotal : 0;
+
+        document.getElementById('t_vol').innerText = volAnulo.toFixed(6) + " m³";
+        document.getElementById('t_masa').innerText = masaTotal.toFixed(3) + " kg";
+        document.getElementById('t_iso').innerText = iso.toFixed(3) + " kg";
+        document.getElementById('t_poliol').innerText = pol.toFixed(3) + " kg";
+    }
+
+    window.onload = function() {
+        calculateFromParts();
+    };
+</script>
+</body>
+</html>
