@@ -28,7 +28,7 @@
         header h1 { font-size: 1.5rem; margin-bottom: 6px; }
         header p { font-size: 0.9rem; opacity: 0.95; }
 
-        /* MENÚ DE NAVEGACIÓN TIPO PESTAÑAS / BOTONES */
+        /* MENÚ DE PESTAÑAS / BOTONES */
         .dashboard-menu { background: white; border-radius: var(--radius); padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #e2e8f0; }
         .dashboard-menu h3 { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
@@ -38,9 +38,8 @@
         .menu-card-btn span.icon { font-size: 1.3rem; }
 
         /* SECCIONES (HOJAS INDEPENDIENTES) */
-        .section-view { display: none; }
-        .section-view.active-view { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .section-view { display: none !important; }
+        .section-view.active-view { display: block !important; }
 
         .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #e2e8f0; }
         .card h2 { font-size: 1.15rem; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
@@ -474,15 +473,12 @@
 
 <script>
     function switchSection(sectionId) {
-        // Ocultar todas las vistas
         let views = document.querySelectorAll('.section-view');
         views.forEach(v => v.classList.remove('active-view'));
 
-        // Desactivar todos los botones
         let buttons = document.querySelectorAll('.menu-card-btn');
         buttons.forEach(b => b.classList.remove('active'));
 
-        // Activar la sección seleccionada
         document.getElementById(sectionId).classList.add('active-view');
         document.getElementById('btn_' + sectionId).classList.add('active');
     }
@@ -647,73 +643,3 @@
 
     function calcFurgon() {
         let largo = parseFloat(document.getElementById('f_largo').value) || 0;
-        let alto = parseFloat(document.getElementById('f_alto').value) || 0;
-        let ancho = parseFloat(document.getElementById('f_ancho').value) || 0;
-        let espesor = parseFloat(document.getElementById('f_espesor').value) || 0;
-        let densCub = parseFloat(document.getElementById('f_dens_cub').value) || 0;
-
-        let { p, i } = getParts();
-        let totalParts = p + i;
-
-        let volParedesLargas = 2 * (largo * alto * espesor);
-        let volPisoTecho = 2 * (largo * ancho * espesor);
-        let volFrontal = ancho * alto * espesor;
-        let volStruct = volParedesLargas + volPisoTecho + volFrontal;
-        let masaStruct = volStruct * densCub;
-
-        let polStruct = totalParts > 0 ? (p / totalParts) * masaStruct : 0;
-        let isoStruct = totalParts > 0 ? (i / totalParts) * masaStruct : 0;
-
-        let volPuertas = ancho * alto * espesor;
-        let masaPuertas = volPuertas * densCub;
-
-        let polPuertas = totalParts > 0 ? (p / totalParts) * masaPuertas : 0;
-        let isoPuertas = totalParts > 0 ? (i / totalParts) * masaPuertas : 0;
-
-        let volTotal = volStruct + volPuertas;
-        let masaTotal = masaStruct + masaPuertas;
-
-        let polTotal = totalParts > 0 ? (p / totalParts) * masaTotal : 0;
-        let isoTotal = totalParts > 0 ? (i / totalParts) * masaTotal : 0;
-
-        document.getElementById('f_vol_struct').innerText = volStruct.toFixed(4) + " m³";
-        document.getElementById('f_masa_struct').innerText = masaStruct.toFixed(2) + " kg";
-        document.getElementById('f_poliol_struct').innerText = polStruct.toFixed(2) + " kg";
-        document.getElementById('f_iso_struct').innerText = isoStruct.toFixed(2) + " kg";
-
-        document.getElementById('f_vol_puertas').innerText = volPuertas.toFixed(4) + " m³";
-        document.getElementById('f_masa_puertas').innerText = masaPuertas.toFixed(2) + " kg";
-        document.getElementById('f_poliol_puertas').innerText = polPuertas.toFixed(2) + " kg";
-        document.getElementById('f_iso_puertas').innerText = isoPuertas.toFixed(2) + " kg";
-
-        document.getElementById('f_vol_total').innerText = volTotal.toFixed(4) + " m³";
-        document.getElementById('f_masa_total').innerText = masaTotal.toFixed(2) + " kg";
-        document.getElementById('f_poliol_kg').innerText = polTotal.toFixed(2) + " kg";
-        document.getElementById('f_iso_kg').innerText = isoTotal.toFixed(2) + " kg";
-    }
-
-    function calcTuberia() {
-        let long = parseFloat(document.getElementById('t_long').value) || 0;
-        let diamPulg = parseFloat(document.getElementById('t_diam').value) || 0;
-        let espPulg = parseFloat(document.getElementById('t_esp').value) || 0;
-        let dens = parseFloat(document.getElementById('t_dens').value) || 0;
-
-        let diamCm = diamPulg * 2.54;
-        let diamMetros = diamPulg * 0.0254;
-        document.getElementById('t_diam_conv').innerText = "= " + diamCm.toFixed(2) + " cm = " + diamMetros.toFixed(4) + " m";
-
-        let espCm = espPulg * 2.54;
-        let espMetros = espPulg * 0.0254;
-        document.getElementById('t_esp_conv').innerText = "= " + espCm.toFixed(2) + " cm = " + espMetros.toFixed(4) + " m";
-
-        let diamExtMetros = diamMetros + (2 * espMetros);
-        document.getElementById('t_diam_ext_total').innerText = (diamExtMetros * 39.3701).toFixed(2) + " pulg (" + diamExtMetros.toFixed(4) + " m)";
-
-        let rInt = diamMetros / 2;
-        let rExt = diamExtMetros / 2;
-        let volAnulo = Math.PI * (Math.pow(rExt, 2) - Math.pow(rInt, 2)) * long;
-        let masaTotal = volAnulo * dens;
-
-        let { p, i } = getParts();
-        let totalParts = p + i;
-        let pol = totalParts > 0
