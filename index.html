@@ -1,716 +1,408 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-50">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Relación y Dosificación de Poliuretano (Poliol / Isocianato)</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        polyol: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0284c7',
-                            600: '#0369a1',
-                            700: '#075985',
-                        },
-                        iso: {
-                            50: '#fff7ed',
-                            100: '#ffedd5',
-                            500: '#ea580c',
-                            600: '#c2410c',
-                            700: '#9a3412',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <title>Calculadora Industrial de Poliuretano - PUR / PIR</title>
     <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --radius: 12px;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 15px; line-height: 1.5; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 25px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 25px 20px; border-radius: var(--radius); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { font-size: 1.6rem; margin-bottom: 8px; }
+        header p { font-size: 0.95rem; opacity: 0.9; }
+
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { background: #e2e8f0; border: none; padding: 10px 16px; font-weight: 600; font-size: 0.9rem; border-radius: 8px; cursor: pointer; color: var(--text-muted); white-space: nowrap; transition: all 0.2s; }
+        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+
+        .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        .card h2 { font-size: 1.2rem; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        input, select { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; background: #fff; color: var(--text-main); transition: border 0.2s; }
+        input:focus, select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+
+        .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+        .preset-chip { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 6px 12px; font-size: 0.85rem; border-radius: 20px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .preset-chip:hover { background: #dbeafe; }
+
+        .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .result-box h3 { font-size: 1rem; color: #166534; margin-bottom: 10px; }
+        .result-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.95rem; }
+        .result-row span:last-child { font-weight: 700; color: #14532d; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .btn-action { background: var(--primary-light); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: background 0.2s; }
+        .btn-action:hover { background: #2563eb; }
+
+        .note { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-top: 8px; }
     </style>
 </head>
-<body class="font-sans text-slate-800 antialiased min-h-full flex flex-col bg-slate-50">
-
-    <!-- Header / Navbar -->
-    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-sky-500 to-orange-500 flex items-center justify-center shadow-md">
-                    <i class="fa-solid fa-flask text-white text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="text-base sm:text-lg font-bold tracking-tight leading-none text-white">Calculadora Poliuretano</h1>
-                    <p class="text-xs text-slate-400 font-medium">Relación Poliol / Isocianato y Dosificación</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-2">
-                <button id="resetBtn" title="Restablecer a 100:100" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 flex items-center gap-1.5">
-                    <i class="fa-solid fa-rotate-left"></i>
-                    <span>Reiniciar</span>
-                </button>
-            </div>
-        </div>
+<body>
+<div class="container">
+    <header>
+        <h1>Calculadora de Poliuretano PUR / PIR</h1>
+        <p>Conversión de relaciones, dosificación por lotes, furgones y tuberías</p>
     </header>
 
-    <!-- Main Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'relaciones')">1. Relación y Dosificación</button>
+        <button class="tab-btn" onclick="switchTab(event, 'furgones')">2. Paneles / Furgones</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tuberias')">3. Aislamiento Tuberías</button>
+    </div>
 
-        <!-- Notificación emergente Toast -->
-        <div id="toast" class="hidden fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 z-50 flex items-center space-x-3 transition-opacity duration-300">
-            <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-            <span id="toastMsg" class="text-sm font-medium">¡Resumen copiado al portapapeles!</span>
-        </div>
-
-        <!-- Presets Bar -->
-        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="flex items-center space-x-2 text-slate-700 font-semibold text-sm">
-                    <i class="fa-solid fa-bolt text-amber-500"></i>
-                    <span>Relaciones comunes (Poliol : Iso):</span>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button class="preset-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 border border-slate-200 transition" data-polyol="100" data-iso="100">100 : 100 (1.00)</button>
-                    <button class="preset-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 border border-slate-200 transition" data-polyol="100" data-iso="105">100 : 105 (1.05)</button>
-                    <button class="preset-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 border border-slate-200 transition" data-polyol="100" data-iso="110">100 : 110 (1.10)</button>
-                    <button class="preset-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 border border-slate-200 transition" data-polyol="100" data-iso="120">100 : 120 (1.20)</button>
-                    <button class="preset-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 border border-slate-200 transition" data-polyol="100" data-iso="150">100 : 150 (1.50)</button>
-                    <button class="preset-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 border border-slate-200 transition" data-polyol="100" data-iso="50">100 : 50 (0.50)</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Core Calculation Layout: 2 Columns -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-            <!-- Left Column: Conversión de formatos y Dosificación (7 cols) -->
-            <div class="lg:col-span-7 space-y-6">
-
-                <!-- SECCIÓN 1: Conversión de Formatos (Sincronizado) -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-slate-900 px-5 py-4 text-white flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-arrows-rotate text-sky-400"></i>
-                            <h2 class="font-bold text-base tracking-wide">1. Conversor de Relaciones Equivalentes</h2>
-                        </div>
-                        <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">Tiempo Real</span>
-                    </div>
-
-                    <div class="p-5 space-y-6">
-
-                        <!-- Formato A: Partes en Peso (PBW) -->
-                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <label class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-scale-balanced text-slate-400"></i>
-                                    Formato 1: Partes en Peso (Base Poliol = 100)
-                                </label>
-                                <span class="text-xs text-slate-400">Ej. 100 : 120</span>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <!-- Poliol PBW -->
-                                <div class="bg-white p-3 rounded-lg border border-sky-200 shadow-sm focus-within:ring-2 focus-within:ring-sky-500 transition">
-                                    <div class="text-xs font-semibold text-sky-700 mb-1 flex items-center gap-1">
-                                        <span class="w-2 h-2 rounded-full bg-sky-500"></span>
-                                        Poliol (Partes)
-                                    </div>
-                                    <div class="flex items-center">
-                                        <input type="number" id="inputPolyolPBW" step="any" min="0.01" class="w-full text-lg font-bold text-slate-800 outline-none bg-transparent" placeholder="100">
-                                        <span class="text-xs text-slate-400 font-medium ml-1">partes</span>
-                                    </div>
-                                </div>
-
-                                <!-- Isocianato PBW -->
-                                <div class="bg-white p-3 rounded-lg border border-orange-200 shadow-sm focus-within:ring-2 focus-within:ring-orange-500 transition">
-                                    <div class="text-xs font-semibold text-orange-700 mb-1 flex items-center gap-1">
-                                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                                        Isocianato (Partes)
-                                    </div>
-                                    <div class="flex items-center">
-                                        <input type="number" id="inputIsoPBW" step="any" min="0.01" class="w-full text-lg font-bold text-slate-800 outline-none bg-transparent" placeholder="120">
-                                        <span class="text-xs text-slate-400 font-medium ml-1">partes</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Formato B: Relación Decimal / Índice -->
-                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <label class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-calculator text-slate-400"></i>
-                                    Formato 2: Valor Decimal / Factor de División
-                                </label>
-                                <span class="text-xs text-slate-400">Ej. 0.833 o 1.200</span>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Poliol / Iso Ratio (Ej: 100/120 = 0.833) -->
-                                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-slate-400 transition">
-                                    <div class="text-xs font-semibold text-slate-600 mb-1">
-                                        Poliol ÷ Isocianato <span class="text-slate-400 font-normal">(Ej: 100/120)</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <input type="number" id="inputPolyolToIso" step="any" min="0.001" class="w-full text-lg font-bold text-slate-800 outline-none bg-transparent" placeholder="0.8333">
-                                        <span class="text-xs bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded">Decimal</span>
-                                    </div>
-                                </div>
-
-                                <!-- Iso / Poliol Ratio (Ej: 120/100 = 1.20) -->
-                                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-slate-400 transition">
-                                    <div class="text-xs font-semibold text-slate-600 mb-1">
-                                        Isocianato ÷ Poliol <span class="text-slate-400 font-normal">(Factor Iso)</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <input type="number" id="inputIsoToPolyol" step="any" min="0.001" class="w-full text-lg font-bold text-slate-800 outline-none bg-transparent" placeholder="1.2000">
-                                        <span class="text-xs bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded">Decimal</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Formato C: Porcentaje en Peso -->
-                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <label class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-percent text-slate-400"></i>
-                                    Formato 3: Porcentaje en Peso (% Masa Total = 100%)
-                                </label>
-                                <span class="text-xs text-slate-400">Ej. 45.45% / 54.55%</span>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <!-- Poliol % -->
-                                <div class="bg-white p-3 rounded-lg border border-sky-200 shadow-sm focus-within:ring-2 focus-within:ring-sky-500 transition">
-                                    <div class="text-xs font-semibold text-sky-700 mb-1">% Poliol</div>
-                                    <div class="flex items-center">
-                                        <input type="number" id="inputPolyolPct" step="any" min="0" max="100" class="w-full text-lg font-bold text-slate-800 outline-none bg-transparent" placeholder="45.45">
-                                        <span class="text-xs font-bold text-sky-600">%</span>
-                                    </div>
-                                </div>
-
-                                <!-- Iso % -->
-                                <div class="bg-white p-3 rounded-lg border border-orange-200 shadow-sm focus-within:ring-2 focus-within:ring-orange-500 transition">
-                                    <div class="text-xs font-semibold text-orange-700 mb-1">% Isocianato</div>
-                                    <div class="flex items-center">
-                                        <input type="number" id="inputIsoPct" step="any" min="0" max="100" class="w-full text-lg font-bold text-slate-800 outline-none bg-transparent" placeholder="54.55">
-                                        <span class="text-xs font-bold text-orange-600">%</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Visual Percentage Bar -->
-                            <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden flex mt-2 shadow-inner">
-                                <div id="polyolBar" class="bg-sky-500 h-full transition-all duration-300" style="width: 45.45%;"></div>
-                                <div id="isoBar" class="bg-orange-500 h-full transition-all duration-300" style="width: 54.55%;"></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- SECCIÓN 2: Cálculo de Dosificación o Inyección Total -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-slate-900 px-5 py-4 text-white flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-weight-hanging text-amber-400"></i>
-                            <h2 class="font-bold text-base tracking-wide">2. Cantidad Total a Inyectar / Meclar</h2>
-                        </div>
-                    </div>
-
-                    <div class="p-5 space-y-5">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Cantidad Total Deseada</label>
-                                <div class="relative rounded-lg shadow-sm">
-                                    <input type="number" id="inputTotalWeight" value="1000" step="any" min="0" class="w-full text-lg font-bold text-slate-800 border border-slate-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none" placeholder="1000">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Unidad de Medida</label>
-                                <select id="selectUnit" class="w-full text-base font-semibold text-slate-700 border border-slate-300 rounded-lg px-3 py-2.5 bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none">
-                                    <option value="kg" selected>Kilogramos (kg)</option>
-                                    <option value="g">Gramos (g)</option>
-                                    <option value="lbs">Libras (lbs)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+    <!-- PESTAÑA 1: RELACIÓN Y DOSIFICACIÓN -->
+    <div id="relaciones" class="tab-content active">
+        <div class="card">
+            <h2>Relación de Mezcla (Poliol e Isocianato)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Puede modificar cualquier campo y los demás se calcularán automáticamente (bidireccional).</p>
+            
+            <div class="presets">
+                <span style="font-size:0.85rem; align-self:center; font-weight:600;">Valores frecuentes:</span>
+                <button class="preset-chip" onclick="setRelation(100, 100)">100 : 100</button>
+                <button class="preset-chip" onclick="setRelation(100, 105)">100 : 105</button>
+                <button class="preset-chip" onclick="setRelation(100, 110)">100 : 110</button>
+                <button class="preset-chip" onclick="setRelation(100, 120)">100 : 120</button>
+                <button class="preset-chip" onclick="setRelation(100, 150)">100 : 150</button>
+                <button class="preset-chip" onclick="setRelation(45, 55)">45% / 55%</button>
             </div>
 
-            <!-- Right Column: Tarjeta de Resultados, Resumen y Tabla (5 cols) -->
-            <div class="lg:col-span-5 space-y-6">
-
-                <!-- TARJETA PRINCIPAL DE CANTIDADES A PESAR -->
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl shadow-lg p-6 relative overflow-hidden border border-slate-700">
-                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-sky-500/10 rounded-full filter blur-2xl pointer-events-none"></div>
-
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-700/80 mb-5">
-                        <h3 class="font-bold text-slate-100 text-lg flex items-center gap-2">
-                            <i class="fa-solid fa-vial text-sky-400"></i>
-                            Cantidades a Pesar / Inyectar
-                        </h3>
-                        <span id="activeUnitBadge" class="bg-sky-900/80 text-sky-300 border border-sky-700/50 text-xs font-bold px-2.5 py-1 rounded-md">kg</span>
-                    </div>
-
-                    <!-- Visualización de Pesos Requeridos -->
-                    <div class="space-y-4">
-                        <!-- Poliol Result Card -->
-                        <div class="bg-slate-800/90 border border-sky-500/40 rounded-xl p-4 flex items-center justify-between shadow-sm">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-lg border border-sky-500/30">
-                                    A
-                                </div>
-                                <div>
-                                    <div class="text-xs font-medium text-slate-400">Poliol Requerido</div>
-                                    <div class="text-xs font-bold text-sky-400" id="displayPolyolPBWText">100.00 partes</div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div id="resPolyolMass" class="text-2xl font-black text-white tracking-tight">454.55</div>
-                                <div class="text-xs text-slate-400 font-medium activeUnitText">kg</div>
-                            </div>
-                        </div>
-
-                        <!-- Isocianato Result Card -->
-                        <div class="bg-slate-800/90 border border-orange-500/40 rounded-xl p-4 flex items-center justify-between shadow-sm">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-lg border border-orange-500/30">
-                                    B
-                                </div>
-                                <div>
-                                    <div class="text-xs font-medium text-slate-400">Isocianato Requerido</div>
-                                    <div class="text-xs font-bold text-orange-400" id="displayIsoPBWText">120.00 partes</div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div id="resIsoMass" class="text-2xl font-black text-white tracking-tight">545.45</div>
-                                <div class="text-xs text-slate-400 font-medium activeUnitText">kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Total Footnote -->
-                    <div class="mt-5 pt-4 border-t border-slate-700/80 flex justify-between items-center text-xs">
-                        <span class="text-slate-400">Peso Total de Mezcla:</span>
-                        <span class="font-bold text-white text-sm"><span id="resTotalMass">1000.00</span> <span class="activeUnitText">kg</span></span>
-                    </div>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Partes de Poliol</label>
+                    <input type="number" id="partPoliol" value="100" oninput="calculateFromParts()">
                 </div>
-
-                <!-- RESUMEN TÉCNICO Y BOTÓN DE COPIAR -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-clipboard-list text-slate-500"></i>
-                            Ficha de Mezcla para el Cliente
-                        </h4>
-                        <button id="copySummaryBtn" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-regular fa-copy"></i>
-                            <span>Copiar Resumen</span>
-                        </button>
-                    </div>
-
-                    <!-- Grid de Especificaciones -->
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 space-y-2 text-xs">
-                        <div class="flex justify-between py-1 border-b border-slate-200">
-                            <span class="text-slate-500">Relación en Partes (Poliol : Iso)</span>
-                            <span id="specPBWRatio" class="font-bold text-slate-800">100.00 : 120.00</span>
-                        </div>
-                        <div class="flex justify-between py-1 border-b border-slate-200">
-                            <span class="text-slate-500">Relación Decimal (Poliol / Iso)</span>
-                            <span id="specPolyolIndex" class="font-bold text-slate-800">0.8333</span>
-                        </div>
-                        <div class="flex justify-between py-1 border-b border-slate-200">
-                            <span class="text-slate-500">Relación Decimal (Iso / Poliol)</span>
-                            <span id="specIsoIndex" class="font-bold text-slate-800">1.2000</span>
-                        </div>
-                        <div class="flex justify-between py-1 border-b border-slate-200">
-                            <span class="text-slate-500">Porcentaje Poliol</span>
-                            <span id="specPolyolPct" class="font-bold text-sky-700">45.45 %</span>
-                        </div>
-                        <div class="flex justify-between py-1 border-b border-slate-200">
-                            <span class="text-slate-500">Porcentaje Isocianato</span>
-                            <span id="specIsoPct" class="font-bold text-orange-700">54.55 %</span>
-                        </div>
-                        <div class="flex justify-between py-1">
-                            <span class="text-slate-500">Total Inyección / Mezcla</span>
-                            <span id="specTargetWeight" class="font-bold text-slate-800">1000.00 kg</span>
-                        </div>
-                    </div>
+                <div class="input-group">
+                    <label>Partes de Isocianato</label>
+                    <input type="number" id="partIso" value="120" oninput="calculateFromParts()">
                 </div>
-
-                <!-- TABLA COMPARATIVA RÁPIDA -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
-                        <h4 class="font-bold text-slate-700 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-table-cells text-slate-500"></i>
-                            Tabla de Desglose
-                        </h4>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-left text-slate-600">
-                            <thead class="bg-slate-50 text-slate-700 uppercase font-bold border-b border-slate-200 text-[10px]">
-                                <tr>
-                                    <th scope="col" class="px-4 py-2.5">Componente</th>
-                                    <th scope="col" class="px-4 py-2.5 text-right">Partes</th>
-                                    <th scope="col" class="px-4 py-2.5 text-right">% Porcentaje</th>
-                                    <th scope="col" class="px-4 py-2.5 text-right">Cantidad a Pesar</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <tr class="hover:bg-sky-50/50 transition">
-                                    <td class="px-4 py-2.5 font-semibold text-sky-800 flex items-center gap-1.5">
-                                        <span class="w-2 h-2 rounded-full bg-sky-500"></span>
-                                        Poliol (Parte A)
-                                    </td>
-                                    <td id="tblPolyolPBW" class="px-4 py-2.5 text-right font-medium">100.00</td>
-                                    <td id="tblPolyolPct" class="px-4 py-2.5 text-right font-medium">45.45%</td>
-                                    <td id="tblPolyolMass" class="px-4 py-2.5 text-right font-bold text-slate-800">454.55</td>
-                                </tr>
-                                <tr class="hover:bg-orange-50/50 transition">
-                                    <td class="px-4 py-2.5 font-semibold text-orange-800 flex items-center gap-1.5">
-                                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                                        Isocianato (Parte B)
-                                    </td>
-                                    <td id="tblIsoPBW" class="px-4 py-2.5 text-right font-medium">120.00</td>
-                                    <td id="tblIsoPct" class="px-4 py-2.5 text-right font-medium">54.55%</td>
-                                    <td id="tblIsoMass" class="px-4 py-2.5 text-right font-bold text-slate-800">545.45</td>
-                                </tr>
-                                <tr class="bg-slate-50/80 font-bold text-slate-800">
-                                    <td class="px-4 py-2.5">Total Mezcla</td>
-                                    <td id="tblTotalPBW" class="px-4 py-2.5 text-right">220.00</td>
-                                    <td class="px-4 py-2.5 text-right">100.00%</td>
-                                    <td id="tblTotalMass" class="px-4 py-2.5 text-right text-sky-700">1000.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="input-group">
+                    <label>Relación Decimal (Iso/Poliol)</label>
+                    <input type="number" id="ratioDecimal" value="1.20" step="0.01" oninput="calculateFromDecimal()">
                 </div>
-
             </div>
 
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>% Poliol en la mezcla</label>
+                    <input type="number" id="pctPoliol" value="45.45" step="0.1" oninput="calculateFromPctPoliol()">
+                </div>
+                <div class="input-group">
+                    <label>% Isocianato en la mezcla</label>
+                    <input type="number" id="pctIso" value="54.55" step="0.1" oninput="calculateFromPctIso()">
+                </div>
+            </div>
         </div>
 
-    </main>
+        <div class="card">
+            <h2>Cálculo de Cantidad a Inyectar / Mezclar</h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Cantidad Total Requerida</label>
+                    <input type="number" id="totalMasa" value="5" step="0.1" oninput="calculateBatch()">
+                </div>
+                <div class="input-group">
+                    <label>Unidad de Medida</label>
+                    <select id="unidadMasa" onchange="calculateBatch()">
+                        <option value="kg">Kilogramos (kg)</option>
+                        <option value="g">Gramos (g)</option>
+                        <option value="lb">Libras (lb)</option>
+                    </select>
+                </div>
+            </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500">
-        <div class="max-w-7xl mx-auto px-4">
-            Herramienta de Formulación de Poliuretano &bull; Cálculo exacto de Poliol e Isocianato
+            <div class="result-box">
+                <h3>Resultado de Dosificación para el Lote:</h3>
+                <div class="result-row">
+                    <span>Cantidad de Poliol:</span>
+                    <span id="resPoliol">--</span>
+                </div>
+                <div class="result-row">
+                    <span>Cantidad de Isocianato:</span>
+                    <span id="resIso">--</span>
+                </div>
+                <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 6px; margin-top: 6px;">
+                    <span>Total Mezcla:</span>
+                    <span id="resTotal">--</span>
+                </div>
+            </div>
         </div>
-    </footer>
+    </div>
 
-    <!-- Lógica JavaScript -->
-    <script>
-        // Estado inicial de la aplicación
-        const state = {
-            polyolPBW: 100.0,
-            isoPBW: 120.0,
-            totalWeight: 1000.0,
-            unit: 'kg'
-        };
+    <!-- PESTAÑA 2: FURGONES / PANELES -->
+    <div id="furgones" class="tab-content">
+        <div class="card">
+            <h2>Cálculo para Paneles de Furgones / Cavas</h2>
+            <p class="note">Calcula el volumen de cavidad y aplica la densidad cubicada (considerando sobrellenado).</p>
+            
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Número de Paneles / Caras iguales</label>
+                    <input type="number" id="f_num" value="4" oninput="calcFurgon()">
+                </div>
+                <div class="input-group">
+                    <label>Largo (m)</label>
+                    <input type="number" id="f_largo" value="9.0" step="0.1" oninput="calcFurgon()">
+                </div>
+                <div class="input-group">
+                    <label>Alto (m)</label>
+                    <input type="number" id="f_alto" value="2.65" step="0.01" oninput="calcFurgon()">
+                </div>
+                <div class="input-group">
+                    <label>Espesor / Grosor (m) [Ej: 0.08m = 8cm]</label>
+                    <input type="number" id="f_espesor" value="0.08" step="0.01" oninput="calcFurgon()">
+                </div>
+            </div>
 
-        // Elementos DOM
-        const inputPolyolPBW = document.getElementById('inputPolyolPBW');
-        const inputIsoPBW = document.getElementById('inputIsoPBW');
-        const inputIsoToPolyol = document.getElementById('inputIsoToPolyol');
-        const inputPolyolToIso = document.getElementById('inputPolyolToIso');
-        const inputPolyolPct = document.getElementById('inputPolyolPct');
-        const inputIsoPct = document.getElementById('inputIsoPct');
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Densidad Libre Laboratorio (kg/m³)</label>
+                    <input type="number" id="f_dens_libre" value="35" oninput="calcFurgon()">
+                </div>
+                <div class="input-group">
+                    <label>Densidad Cubicada / Inyectada (kg/m³)</label>
+                    <input type="number" id="f_dens_cub" value="42" oninput="calcFurgon()">
+                </div>
+            </div>
 
-        const polyolBar = document.getElementById('polyolBar');
-        const isoBar = document.getElementById('isoBar');
+            <div class="result-box">
+                <h3>Resultados de Inyección en Furgón:</h3>
+                <div class="result-row">
+                    <span>Volumen Total Cavidad:</span>
+                    <span id="f_vol_total">--</span>
+                </div>
+                <div class="result-row">
+                    <span>Masa Total Requerida (kg):</span>
+                    <span id="f_masa_total">--</span>
+                </div>
+                <div class="result-row">
+                    <span>Poliol necesario (kg):</span>
+                    <span id="f_poliol_kg">--</span>
+                </div>
+                <div class="result-row">
+                    <span>Isocianato necesario (kg):</span>
+                    <span id="f_iso_kg">--</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        const inputTotalWeight = document.getElementById('inputTotalWeight');
-        const selectUnit = document.getElementById('selectUnit');
+    <!-- PESTAÑA 3: TUBERÍAS -->
+    <div id="tuberias" class="tab-content">
+        <div class="card">
+            <h2>Aislamiento Térmico en Tuberías (PUR / PIR)</h2>
+            <p class="note">Cálculo del volumen del ánulo aislante y requerimiento de componentes.</p>
 
-        // Pantalla de Resultados
-        const resPolyolMass = document.getElementById('resPolyolMass');
-        const resIsoMass = document.getElementById('resIsoMass');
-        const resTotalMass = document.getElementById('resTotalMass');
-        const displayPolyolPBWText = document.getElementById('displayPolyolPBWText');
-        const displayIsoPBWText = document.getElementById('displayIsoPBWText');
-        const activeUnitBadge = document.getElementById('activeUnitBadge');
-        const activeUnitTexts = document.querySelectorAll('.activeUnitText');
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Longitud de Tubería (m)</label>
+                    <input type="number" id="t_long" value="10" step="1" oninput="calcTuberia()">
+                </div>
+                <div class="input-group">
+                    <label>Diámetro de la Tubería (pulgadas)</label>
+                    <input type="number" id="t_diam" value="4" step="0.5" oninput="calcTuberia()">
+                </div>
+                <div class="input-group">
+                    <label>Espesor de Aislamiento (pulgadas)</label>
+                    <input type="number" id="t_esp" value="2" step="0.5" oninput="calcTuberia()">
+                </div>
+                <div class="input-group">
+                    <label>Densidad del Sistema (kg/m³)</label>
+                    <input type="number" id="t_dens" value="37" oninput="calcTuberia()">
+                </div>
+            </div>
 
-        // Pantalla Resumen Técnico
-        const specPBWRatio = document.getElementById('specPBWRatio');
-        const specIsoIndex = document.getElementById('specIsoIndex');
-        const specPolyolIndex = document.getElementById('specPolyolIndex');
-        const specPolyolPct = document.getElementById('specPolyolPct');
-        const specIsoPct = document.getElementById('specIsoPct');
-        const specTargetWeight = document.getElementById('specTargetWeight');
+            <div class="result-box">
+                <h3>Resultados para Tubería:</h3>
+                <div class="result-row">
+                    <span>Volumen del Ánulo (m³):</span>
+                    <span id="t_vol">--</span>
+                </div>
+                <div class="result-row">
+                    <span>Cantidad Total Poliuretano (kg):</span>
+                    <span id="t_masa">--</span>
+                </div>
+                <div class="result-row">
+                    <span>Poliol (kg):</span>
+                    <span id="t_poliol">--</span>
+                </div>
+                <div class="result-row">
+                    <span>Isocianato (kg):</span>
+                    <span id="t_iso">--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        // Tabla
-        const tblPolyolPBW = document.getElementById('tblPolyolPBW');
-        const tblIsoPBW = document.getElementById('tblIsoPBW');
-        const tblTotalPBW = document.getElementById('tblTotalPBW');
-        const tblPolyolPct = document.getElementById('tblPolyolPct');
-        const tblIsoPct = document.getElementById('tblIsoPct');
-        const tblPolyolMass = document.getElementById('tblPolyolMass');
-        const tblIsoMass = document.getElementById('tblIsoMass');
-        const tblTotalMass = document.getElementById('tblTotalMass');
+<script>
+    function switchTab(evt, tabName) {
+        let contents = document.getElementsByClassName("tab-content");
+        for (let c of contents) c.classList.remove("active");
+        let buttons = document.getElementsByClassName("tab-btn");
+        for (let b of buttons) b.classList.remove("active");
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
 
-        // Botones y Toast
-        const copySummaryBtn = document.getElementById('copySummaryBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const presetBtns = document.querySelectorAll('.preset-btn');
-        const toast = document.getElementById('toast');
-        const toastMsg = document.getElementById('toastMsg');
+    function setRelation(pol, iso) {
+        document.getElementById('partPoliol').value = pol;
+        document.getElementById('partIso').value = iso;
+        calculateFromParts();
+    }
 
-        let isUpdating = false;
+    function getParts() {
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 0;
+        return { p, i };
+    }
 
-        function formatNum(num, decimals = 2) {
-            if (isNaN(num) || !isFinite(num)) return '0.00';
-            return parseFloat(num.toFixed(decimals)).toLocaleString('es-ES', {
-                minimumFractionDigits: decimals,
-                maximumFractionDigits: decimals
-            });
-        }
+    function calculateFromParts() {
+        let { p, i } = getParts();
+        if (p <= 0) p = 1;
+        let ratio = i / p;
+        let total = p + i;
+        let pctP = (p / total) * 100;
+        let pctI = (i / total) * 100;
 
-        function calculateFromRatio(sourceField, value) {
-            if (isUpdating) return;
-            isUpdating = true;
+        document.getElementById('ratioDecimal').value = ratio.toFixed(3);
+        document.getElementById('pctPoliol').value = pctP.toFixed(2);
+        document.getElementById('pctIso').value = pctI.toFixed(2);
+        calculateBatch();
+        calcFurgon();
+        calcTuberia();
+    }
 
-            let polyol = state.polyolPBW;
-            let iso = state.isoPBW;
+    function calculateFromDecimal() {
+        let ratio = parseFloat(document.getElementById('ratioDecimal').value) || 0;
+        let p = 100;
+        let i = p * ratio;
+        document.getElementById('partIso').value = i.toFixed(2);
+        let total = p + i;
+        let pctP = (p / total) * 100;
+        let pctI = (i / total) * 100;
 
-            const val = parseFloat(value);
+        document.getElementById('pctPoliol').value = pctP.toFixed(2);
+        document.getElementById('pctIso').value = pctI.toFixed(2);
+        calculateBatch();
+        calcFurgon();
+        calcTuberia();
+    }
 
-            if (!isNaN(val) && val > 0) {
-                switch (sourceField) {
-                    case 'polyolPBW':
-                        polyol = val;
-                        break;
+    function calculateFromPctPoliol() {
+        let pctP = parseFloat(document.getElementById('pctPoliol').value) || 0;
+        if (pctP <= 0) pctP = 1; if (pctP >= 100) pctP = 99;
+        let pctI = 100 - pctP;
+        document.getElementById('pctIso').value = pctI.toFixed(2);
+        
+        let p = 100;
+        let i = (pctI * p) / pctP;
+        document.getElementById('partIso').value = i.toFixed(2);
+        document.getElementById('ratioDecimal').value = (i / p).toFixed(3);
+        calculateBatch();
+        calcFurgon();
+        calcTuberia();
+    }
 
-                    case 'isoPBW':
-                        iso = val;
-                        break;
+    function calculateFromPctIso() {
+        let pctI = parseFloat(document.getElementById('pctIso').value) || 0;
+        if (pctI <= 0) pctI = 1; if (pctI >= 100) pctI = 99;
+        let pctP = 100 - pctI;
+        document.getElementById('pctPoliol').value = pctP.toFixed(2);
+        
+        let p = 100;
+        let i = (pctI * p) / pctP;
+        document.getElementById('partIso').value = i.toFixed(2);
+        document.getElementById('ratioDecimal').value = (i / p).toFixed(3);
+        calculateBatch();
+        calcFurgon();
+        calcTuberia();
+    }
 
-                    case 'isoToPolyol': // Iso / Poliol (ej. 1.20)
-                        iso = polyol * val;
-                        break;
+    function calculateBatch() {
+        let { p, i } = getParts();
+        let totalParts = p + i;
+        let totalMasa = parseFloat(document.getElementById('totalMasa').value) || 0;
+        let unidad = document.getElementById('unidadMasa').value;
 
-                    case 'polyolToIso': // Poliol / Iso (ej. 0.8333)
-                        iso = polyol / val;
-                        break;
+        if (totalParts <= 0) return;
 
-                    case 'polyolPct': // Poliol %
-                        if (val < 100) {
-                            const pPct = Math.max(0.01, Math.min(99.99, val));
-                            const iPct = 100 - pPct;
-                            iso = (iPct / pPct) * polyol;
-                        }
-                        break;
+        let masaPoliol = (p / totalParts) * totalMasa;
+        let masaIso = (i / totalParts) * totalMasa;
 
-                    case 'isoPct': // Iso %
-                        if (val < 100) {
-                            const iPct = Math.max(0.01, Math.min(99.99, val));
-                            const pPct = 100 - iPct;
-                            iso = (iPct / pPct) * polyol;
-                        }
-                        break;
-                }
-            }
+        document.getElementById('resPoliol').innerText = masaPoliol.toFixed(2) + " " + unidad;
+        document.getElementById('resIso').innerText = masaIso.toFixed(2) + " " + unidad;
+        document.getElementById('resTotal').innerText = totalMasa.toFixed(2) + " " + unidad;
+    }
 
-            state.polyolPBW = polyol;
-            state.isoPBW = iso;
+    function calcFurgon() {
+        let num = parseFloat(document.getElementById('f_num').value) || 0;
+        let largo = parseFloat(document.getElementById('f_largo').value) || 0;
+        let alto = parseFloat(document.getElementById('f_alto').value) || 0;
+        let espesor = parseFloat(document.getElementById('f_espesor').value) || 0;
+        let densCub = parseFloat(document.getElementById('f_dens_cub').value) || 0;
 
-            updateAllUI(sourceField);
-            isUpdating = false;
-        }
+        let volTotal = num * largo * alto * espesor;
+        let masaTotal = volTotal * densCub;
 
-        function updateAllUI(skipField = null) {
-            const polyol = state.polyolPBW;
-            const iso = state.isoPBW;
-            const totalPBW = polyol + iso;
+        let { p, i } = getParts();
+        let totalParts = p + i;
+        let pol = totalParts > 0 ? (p / totalParts) * masaTotal : 0;
+        let iso = totalParts > 0 ? (i / totalParts) * masaTotal : 0;
 
-            const isoToPolyolRatio = iso / polyol;
-            const polyolToIsoRatio = polyol / iso;
+        document.getElementById('f_vol_total').innerText = volTotal.toFixed(4) + " m³";
+        document.getElementById('f_masa_total').innerText = masaTotal.toFixed(2) + " kg";
+        document.getElementById('f_poliol_kg').innerText = pol.toFixed(2) + " kg";
+        document.getElementById('f_iso_kg').innerText = iso.toFixed(2) + " kg";
+    }
 
-            const polyolPct = (polyol / totalPBW) * 100;
-            const isoPct = (iso / totalPBW) * 100;
+    function calcTuberia() {
+        let long = parseFloat(document.getElementById('t_long').value) || 0;
+        let diamPulg = parseFloat(document.getElementById('t_diam').value) || 0;
+        let espPulg = parseFloat(document.getElementById('t_esp').value) || 0;
+        let dens = parseFloat(document.getElementById('t_dens').value) || 0;
 
-            const totalWeight = state.totalWeight;
+        let diamInt = diamPulg * 0.0254;
+        let esp = espPulg * 0.0254;
+        let diamExt = diamInt + (2 * esp);
 
-            const polyolMass = (polyolPct / 100) * totalWeight;
-            const isoMass = (isoPct / 100) * totalWeight;
+        let rInt = diamInt / 2;
+        let rExt = diamExt / 2;
+        let volAnulo = Math.PI * (Math.pow(rExt, 2) - Math.pow(rInt, 2)) * long;
+        let masaTotal = volAnulo * dens;
 
-            // Actualizar campos de texto
-            if (skipField !== 'polyolPBW') inputPolyolPBW.value = parseFloat(polyol.toFixed(2));
-            if (skipField !== 'isoPBW') inputIsoPBW.value = parseFloat(iso.toFixed(2));
-            if (skipField !== 'isoToPolyol') inputIsoToPolyol.value = parseFloat(isoToPolyolRatio.toFixed(4));
-            if (skipField !== 'polyolToIso') inputPolyolToIso.value = parseFloat(polyolToIsoRatio.toFixed(4));
-            if (skipField !== 'polyolPct') inputPolyolPct.value = parseFloat(polyolPct.toFixed(2));
-            if (skipField !== 'isoPct') inputIsoPct.value = parseFloat(isoPct.toFixed(2));
+        let { p, i } = getParts();
+        let totalParts = p + i;
+        let pol = totalParts > 0 ? (p / totalParts) * masaTotal : 0;
+        let iso = totalParts > 0 ? (i / totalParts) * masaTotal : 0;
 
-            // Barra de progreso
-            polyolBar.style.width = `${polyolPct}%`;
-            isoBar.style.width = `${isoPct}%`;
+        document.getElementById('t_vol').innerText = volAnulo.toFixed(4) + " m³";
+        document.getElementById('t_masa').innerText = masaTotal.toFixed(2) + " kg";
+        document.getElementById('t_poliol').innerText = pol.toFixed(2) + " kg";
+        document.getElementById('t_iso').innerText = iso.toFixed(2) + " kg";
+    }
 
-            // Tarjeta Principal
-            displayPolyolPBWText.textContent = `${formatNum(polyol, 2)} partes`;
-            displayIsoPBWText.textContent = `${formatNum(iso, 2)} partes`;
-
-            resPolyolMass.textContent = formatNum(polyolMass, 2);
-            resIsoMass.textContent = formatNum(isoMass, 2);
-            resTotalMass.textContent = formatNum(totalWeight, 2);
-
-            activeUnitBadge.textContent = state.unit;
-            activeUnitTexts.forEach(el => el.textContent = state.unit);
-
-            // Ficha Técnica de Resumen
-            specPBWRatio.textContent = `${formatNum(polyol, 2)} : ${formatNum(iso, 2)}`;
-            specPolyolIndex.textContent = formatNum(polyolToIsoRatio, 4);
-            specIsoIndex.textContent = formatNum(isoToPolyolRatio, 4);
-            specPolyolPct.textContent = `${formatNum(polyolPct, 2)} %`;
-            specIsoPct.textContent = `${formatNum(isoPct, 2)} %`;
-            specTargetWeight.textContent = `${formatNum(totalWeight, 2)} ${state.unit}`;
-
-            // Tabla Comparativa
-            tblPolyolPBW.textContent = formatNum(polyol, 2);
-            tblIsoPBW.textContent = formatNum(iso, 2);
-            tblTotalPBW.textContent = formatNum(totalPBW, 2);
-
-            tblPolyolPct.textContent = `${formatNum(polyolPct, 2)}%`;
-            tblIsoPct.textContent = `${formatNum(isoPct, 2)}%`;
-
-            tblPolyolMass.textContent = `${formatNum(polyolMass, 2)} ${state.unit}`;
-            tblIsoMass.textContent = `${formatNum(isoMass, 2)} ${state.unit}`;
-            tblTotalMass.textContent = `${formatNum(totalWeight, 2)} ${state.unit}`;
-        }
-
-        // Event Listeners
-        inputPolyolPBW.addEventListener('input', (e) => calculateFromRatio('polyolPBW', e.target.value));
-        inputIsoPBW.addEventListener('input', (e) => calculateFromRatio('isoPBW', e.target.value));
-        inputIsoToPolyol.addEventListener('input', (e) => calculateFromRatio('isoToPolyol', e.target.value));
-        inputPolyolToIso.addEventListener('input', (e) => calculateFromRatio('polyolToIso', e.target.value));
-        inputPolyolPct.addEventListener('input', (e) => calculateFromRatio('polyolPct', e.target.value));
-        inputIsoPct.addEventListener('input', (e) => calculateFromRatio('isoPct', e.target.value));
-
-        inputTotalWeight.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
-            if (!isNaN(val) && val >= 0) {
-                state.totalWeight = val;
-                updateAllUI('totalWeight');
-            }
-        });
-
-        selectUnit.addEventListener('change', (e) => {
-            state.unit = e.target.value;
-            updateAllUI();
-        });
-
-        // Botones Preajustados
-        presetBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const poly = parseFloat(btn.getAttribute('data-polyol'));
-                const iso = parseFloat(btn.getAttribute('data-iso'));
-                
-                state.polyolPBW = poly;
-                state.isoPBW = iso;
-                updateAllUI();
-            });
-        });
-
-        // Botón Reiniciar
-        resetBtn.addEventListener('click', () => {
-            state.polyolPBW = 100.0;
-            state.isoPBW = 100.0;
-            state.totalWeight = 1000.0;
-            state.unit = 'kg';
-            selectUnit.value = 'kg';
-            inputTotalWeight.value = 1000;
-            updateAllUI();
-            showToast("Se restableció a la formulación 100:100.");
-        });
-
-        // Copiar Resumen
-        copySummaryBtn.addEventListener('click', () => {
-            const polyol = state.polyolPBW;
-            const iso = state.isoPBW;
-            const totalPBW = polyol + iso;
-            const polyolPct = (polyol / totalPBW) * 100;
-            const isoPct = (iso / totalPBW) * 100;
-            const totalWeight = state.totalWeight;
-            const polyolMass = (polyolPct / 100) * totalWeight;
-            const isoMass = (isoPct / 100) * totalWeight;
-
-            const summaryText = `ESPECIFICACIÓN DE MEZCLA DE POLIURETANO
-====================================
-• Relación en Partes (Poliol : Iso): ${formatNum(polyol, 2)} : ${formatNum(iso, 2)}
-• Relación Decimal (Poliol / Iso): ${formatNum(polyol / iso, 4)} (0.83 aprox.)
-• Relación Decimal (Iso / Poliol): ${formatNum(iso / polyol, 4)}
-• Mezcla en Porcentaje: Poliol ${formatNum(polyolPct, 2)}% | Iso ${formatNum(isoPct, 2)}%
-------------------------------------
-DOSIFICACIÓN PARA INYECCIÓN (${formatNum(totalWeight, 2)} ${state.unit}):
-1. Poliol (Parte A): ${formatNum(polyolMass, 2)} ${state.unit}
-2. Isocianato (Parte B): ${formatNum(isoMass, 2)} ${state.unit}
-====================================
-Calculado con la APP de Formulación de Poliuretano`;
-
-            const textArea = document.createElement("textarea");
-            textArea.value = summaryText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast("¡Resumen copiado al portapapeles!");
-            } catch (err) {
-                showToast("No se pudo copiar el texto.");
-            }
-            document.body.removeChild(textArea);
-        });
-
-        function showToast(message) {
-            toastMsg.textContent = message;
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-
-        window.onload = function() {
-            updateAllUI();
-        };
-    </script>
+    window.onload = function() {
+        calculateFromParts();
+        calcFurgon();
+        calcTuberia();
+    };
+</script>
 </body>
 </html>
