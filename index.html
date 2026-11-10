@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Industrial de Poliuretano | Espumlátex S.A.</title>
-    <!-- Meta tags para vista previa al compartir por WhatsApp / Redes Sociales -->
-    <meta property="og:title" content="Calculadora Industrial de Poliuretano PUR/PIR - Espumlátex S.A.">
-    <meta property="og:description" content="Herramienta técnica interactiva para cálculo de dosificación, furgones térmicos, paneles individuales y aislamiento de tuberías.">
+    <title>Calculadora Industrial de Poliuretano | Alvaher & Espumlátex S.A.</title>
+    
+    <!-- ETIQUETAS DE VISTA PREVIA PARA WHATSAPP Y REDES SOCIALES -->
+    <meta property="og:title" content="Calculadora Industrial PUR/PIR - Alvaher & Espumlátex S.A.">
+    <meta property="og:description" content="Herramienta técnica interactiva: Dosificación, Calibración de Bombas, Conversor Galones/Kilos, Furgones y Tuberías.">
     <meta property="og:image" content="https://espumlatex.com.co/wp-content/uploads/2021/04/Logo-base-azul-corporativo-1024x549.png">
     <meta property="og:type" content="website">
+
     <style>
         :root {
             --primary: #1e3a8a;
@@ -25,68 +27,67 @@
         body { background-color: var(--bg-color); color: var(--text-main); padding: 15px; line-height: 1.5; }
         .container { max-width: 850px; margin: 0 auto; }
         header { text-align: center; margin-bottom: 20px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 25px 20px; border-radius: var(--radius); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header h1 { font-size: 1.5rem; margin-bottom: 6px; }
-        header p { font-size: 0.9rem; opacity: 0.95; }
+        header h1 { font-size: 1.4rem; margin-bottom: 6px; }
+        header p { font-size: 0.85rem; opacity: 0.95; }
 
-        /* MENÚ DE PESTAÑAS / BOTONES */
+        /* MENÚ DE PESTAÑAS */
         .dashboard-menu { background: white; border-radius: var(--radius); padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #e2e8f0; }
-        .dashboard-menu h3 { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-        .menu-card-btn { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; text-align: center; color: var(--text-main); font-weight: 600; font-size: 0.85rem; transition: all 0.2s; display: flex; flex-direction: column; gap: 4px; align-items: center; cursor: pointer; }
+        .dashboard-menu h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+        .menu-card-btn { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 8px; text-align: center; color: var(--text-main); font-weight: 600; font-size: 0.78rem; transition: all 0.2s; display: flex; flex-direction: column; gap: 4px; align-items: center; cursor: pointer; }
         .menu-card-btn:hover { background: #e2e8f0; border-color: #94a3b8; }
         .menu-card-btn.active { background: #eff6ff; border-color: var(--primary-light); color: var(--primary); box-shadow: 0 4px 6px rgba(59,130,246,0.15); }
-        .menu-card-btn span.icon { font-size: 1.3rem; }
+        .menu-card-btn span.icon { font-size: 1.2rem; }
 
-        /* SECCIONES OCULTAS POR DEFECTO */
+        /* SECCIONES */
         .calc-section { display: none; }
-
         .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #e2e8f0; }
-        .card h2 { font-size: 1.15rem; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+        .card h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
 
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        .input-group { display: flex; flex-direction: column; gap: 6px; }
-        label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-        input, select { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; background: #fff; color: var(--text-main); transition: border 0.2s; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        .input-group { display: flex; flex-direction: column; gap: 5px; }
+        label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+        input, select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; background: #fff; color: var(--text-main); }
         input:focus, select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
 
-        .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
-        .preset-chip { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 6px 12px; font-size: 0.85rem; border-radius: 20px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .presets { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .preset-chip { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 5px 10px; font-size: 0.78rem; border-radius: 20px; cursor: pointer; font-weight: 600; }
         .preset-chip:hover { background: #dbeafe; }
 
-        .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 15px; margin-top: 15px; }
-        .result-box h3 { font-size: 1rem; color: #166534; margin-bottom: 10px; }
-        .result-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.95rem; }
+        .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px; margin-top: 15px; }
+        .result-box h3 { font-size: 0.95rem; color: #166534; margin-bottom: 8px; }
+        .result-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
         .result-row span:last-child { font-weight: 700; color: #14532d; }
-
-        .diagram-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center; }
-        .note { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-top: 8px; }
-        .highlight-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 15px; font-size: 0.85rem; color: #1e40af; margin-bottom: 15px; line-height: 1.4; }
-        .conversion-tag { font-size: 0.75rem; color: #3b82f6; font-weight: 600; }
+        .note { font-size: 0.78rem; color: var(--text-muted); font-style: italic; margin-top: 6px; }
     </style>
 </head>
 <body>
 <div class="container">
     <header>
-        <div style="background: white; display: inline-block; padding: 8px 24px; border-radius: 50px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-            <svg width="180" height="35" viewBox="0 0 200 35" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+        <div style="background: white; display: inline-block; padding: 6px 20px; border-radius: 50px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+            <svg width="160" height="30" viewBox="0 0 200 35" xmlns="http://www.w3.org/2000/svg">
                 <text x="0" y="27" font-family="'Segoe UI', Arial, sans-serif" font-size="26" font-weight="700" fill="#1e3a8a" letter-spacing="-0.5">Espumlátex<tspan font-size="13" dy="-12">®</tspan></text>
             </svg>
         </div>
         <h1>Calculadora Industrial de Poliuretano PUR / PIR</h1>
-        <p style="font-weight: 500; opacity: 0.95;">Desarrollo Comercial e Innovación | Espumlátex S.A.</p>
+        <p>Alvaher & Espumlátex S.A. | Desarrollo Comercial e Innovación</p>
     </header>
 
     <!-- MENÚ DE PESTAÑAS -->
     <div class="dashboard-menu">
-        <h3>Seleccione el módulo de cálculo:</h3>
+        <h3>Seleccione el módulo de trabajo:</h3>
         <div class="menu-grid">
             <button id="btn_sec_relaciones" class="menu-card-btn active" onclick="mostrarSeccion('sec_relaciones')">
                 <span class="icon">⚖️</span>
-                <span>Relación y Dosificación</span>
+                <span>Relación y Lote</span>
             </button>
-            <button id="btn_sec_panel" class="menu-card-btn" onclick="mostrarSeccion('sec_panel')">
-                <span class="icon">🧱</span>
-                <span>Panel Único y Calibración</span>
+            <button id="btn_sec_calibracion" class="menu-card-btn" onclick="mostrarSeccion('sec_calibracion')">
+                <span class="icon">⚙️</span>
+                <span>Calibración Bombas</span>
+            </button>
+            <button id="btn_sec_conversiones" class="menu-card-btn" onclick="mostrarSeccion('sec_conversiones')">
+                <span class="icon">🛢️</span>
+                <span>Galones ⇄ Kilos</span>
             </button>
             <button id="btn_sec_furgones" class="menu-card-btn" onclick="mostrarSeccion('sec_furgones')">
                 <span class="icon">🚚</span>
@@ -94,207 +95,126 @@
             </button>
             <button id="btn_sec_tuberias" class="menu-card-btn" onclick="mostrarSeccion('sec_tuberias')">
                 <span class="icon">🧪</span>
-                <span>Aislamiento Tuberías</span>
+                <span>Tuberías PUR</span>
             </button>
         </div>
     </div>
 
     <!-- SECCIÓN 1: RELACIÓN Y DOSIFICACIÓN -->
     <div id="sec_relaciones" class="calc-section card" style="display: block;">
-        <h2><span>1. Relación de Mezcla y Dosificación</span></h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Seleccione un preset o modifique cualquier campo para calcular los demás automáticamente.</p>
-        
+        <h2><span>1. Relación de Mezcla y Dosificación de Lote</span></h2>
         <div class="presets">
-            <span style="font-size:0.85rem; align-self:center; font-weight:600;">Presets:</span>
-            <button class="preset-chip" onclick="setRelationParts(100, 100)">100 : 100 (1.00)</button>
-            <button class="preset-chip" onclick="setRelationParts(100, 105)">100 : 105 (1.05)</button>
-            <button class="preset-chip" onclick="setRelationParts(100, 110)">100 : 110 (1.10)</button>
-            <button class="preset-chip" onclick="setRelationParts(100, 120)">100 : 120 (1.20)</button>
-            <button class="preset-chip" onclick="setRelationDecimal(0.833)">Poliol/Iso (0.833)</button>
-            <button class="preset-chip" onclick="setRelationParts(45, 55)">45% / 55%</button>
+            <span style="font-size:0.8rem; align-self:center; font-weight:600;">Presets:</span>
+            <button class="preset-chip" onclick="setParts(100, 100)">100 : 100</button>
+            <button class="preset-chip" onclick="setParts(100, 105)">100 : 105</button>
+            <button class="preset-chip" onclick="setParts(100, 110)">100 : 110</button>
+            <button class="preset-chip" onclick="setParts(100, 120)">100 : 120</button>
         </div>
-
-        <div class="form-grid">
-            <div class="input-group">
-                <label>Relación Decimal (Poliol / Isocianato)</label>
-                <input type="number" id="ratioPolIso" value="0.833" step="0.001" oninput="calculateFromRatioPolIso()">
-            </div>
-            <div class="input-group">
-                <label>Relación Decimal (Isocianato / Poliol)</label>
-                <input type="number" id="ratioIsoPol" value="1.200" step="0.001" oninput="calculateFromRatioIsoPol()">
-            </div>
-        </div>
-
         <div class="form-grid">
             <div class="input-group">
                 <label>Partes de Poliol</label>
-                <input type="number" id="partPoliol" value="100" oninput="calculateFromParts()">
+                <input type="number" id="partPoliol" value="100" oninput="calculateBatch()">
             </div>
             <div class="input-group">
                 <label>Partes de Isocianato</label>
-                <input type="number" id="partIso" value="120" oninput="calculateFromParts()">
+                <input type="number" id="partIso" value="120" oninput="calculateBatch()">
             </div>
         </div>
-
         <div class="form-grid">
             <div class="input-group">
-                <label>% Poliol en la mezcla</label>
-                <input type="number" id="pctPoliol" value="45.45" step="0.01" oninput="calculateFromPctPoliol()">
+                <label>Cantidad Total Lote Requerido</label>
+                <input type="number" id="totalMasa" value="10" step="0.5" oninput="calculateBatch()">
             </div>
             <div class="input-group">
-                <label>% Isocianato en la mezcla</label>
-                <input type="number" id="pctIso" value="54.55" step="0.01" oninput="calculateFromPctIso()">
-            </div>
-        </div>
-
-        <h3 style="font-size: 1.05rem; color: var(--primary); margin-top: 15px; margin-bottom: 10px; border-top: 1px solid #f1f5f9; padding-top: 12px;">Cálculo de Lote a Mezclar / Inyectar</h3>
-        <div class="form-grid">
-            <div class="input-group">
-                <label>Cantidad Total Requerida</label>
-                <input type="number" id="totalMasa" value="5" step="0.1" oninput="calculateBatch()">
-            </div>
-            <div class="input-group">
-                <label>Unidad de Medida</label>
+                <label>Unidad</label>
                 <select id="unidadMasa" onchange="calculateBatch()">
                     <option value="kg">Kilogramos (kg)</option>
-                    <option value="g">Gramos (g)</option>
                     <option value="lb">Libras (lb)</option>
+                    <option value="g">Gramos (g)</option>
                 </select>
             </div>
         </div>
-
         <div class="result-box">
             <h3>Resultado de Dosificación para el Lote:</h3>
             <div class="result-row">
-                <span>Cantidad de Poliol:</span>
+                <span>Poliol Requerido:</span>
                 <span id="resPoliol">--</span>
             </div>
             <div class="result-row">
-                <span>Cantidad de Isocianato:</span>
+                <span>Isocianato Requerido:</span>
                 <span id="resIso">--</span>
             </div>
-            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 6px; margin-top: 6px;">
+            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 5px; margin-top: 5px;">
                 <span>Total Mezcla:</span>
                 <span id="resTotal">--</span>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 2: PANEL INDIVIDUAL Y CALIBRACIÓN -->
-    <div id="sec_panel" class="calc-section card">
-        <h2><span>2. Panel Único y Calibración de Máquina</span></h2>
-        <p class="note">Ideal para inyectar una sola pared/panel o ajustar el tiempo de disparo en máquina según el caudal.</p>
-        
-        <div class="diagram-card">
-            <svg width="240" height="120" viewBox="0 0 240 120">
-                <rect x="40" y="25" width="160" height="70" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="2" rx="4"/>
-                <line x1="40" y1="105" x2="200" y1="105" stroke="#1e3a8a" stroke-width="1.5"/>
-                <text x="120" y="117" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">Largo (m)</text>
-                <line x1="25" y1="25" x2="25" y2="95" stroke="#1e3a8a" stroke-width="1.5"/>
-                <text x="18" y="63" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">Alto (m)</text>
-                <text x="120" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">Espesor (m)</text>
-            </svg>
-        </div>
-
-        <div class="highlight-box">
-            <strong>Dimensiones del Panel Único:</strong>
-        </div>
-
+    <!-- SECCIÓN 2: CALIBRACIÓN GRAVIMÉTRICA DE BOMBAS -->
+    <div id="sec_calibracion" class="calc-section card">
+        <h2><span>2. Calibración Gravimétrica de Bombas en Planta/Campo</span></h2>
+        <p class="note" style="margin-bottom: 12px;">Mida los gramos arrojados por cada bomba en un tiempo de prueba (ej. 6 segundos) para verificar y ajustar la relación real.</p>
         <div class="form-grid">
             <div class="input-group">
-                <label>Largo del Panel (m)</label>
-                <input type="number" id="p_largo" value="2.5" step="0.1" oninput="calcPanel()">
+                <label>Tiempo de Disparo de Prueba (seg)</label>
+                <input type="number" id="cal_tiempo" value="6" step="1" oninput="calcCalibracion()">
             </div>
             <div class="input-group">
-                <label>Alto / Ancho del Panel (m)</label>
-                <input type="number" id="p_alto" value="1.2" step="0.01" oninput="calcPanel()">
+                <label>Gramos Poliol Recolectados (g)</label>
+                <input type="number" id="cal_gramos_pol" value="1200" step="10" oninput="calcCalibracion()">
             </div>
             <div class="input-group">
-                <label>Espesor (m) [Ej: 0.05m = 5cm]</label>
-                <input type="number" id="p_espesor" value="0.05" step="0.01" oninput="calcPanel()">
+                <label>Gramos Isocianato Recolectados (g)</label>
+                <input type="number" id="cal_gramos_iso" value="1440" step="10" oninput="calcCalibracion()">
             </div>
         </div>
-
-        <div class="form-grid">
-            <div class="input-group">
-                <label>Densidad Libre (kg/m³)</label>
-                <input type="number" id="p_dens_libre" value="35" oninput="calcPanel()">
-            </div>
-            <div class="input-group">
-                <label>Densidad Cubicada / Inyectada (kg/m³)</label>
-                <input type="number" id="p_dens_cub" value="42" oninput="calcPanel()">
-            </div>
-        </div>
-
-        <div class="highlight-box" style="background:#fffbe5; border-color:#fde68a; color:#92400e;">
-            <strong>Calibración de Máquina de Inyección:</strong>
-        </div>
-
-        <div class="form-grid">
-            <div class="input-group">
-                <label>Caudal de la Máquina (kg/segundo) o (g/seg)</label>
-                <input type="number" id="p_caudal" value="0.5" step="0.01" oninput="calcPanel()">
-                <select id="p_unidad_caudal" onchange="calcPanel()" style="margin-top:4px;">
-                    <option value="kg_s">kg / segundo</option>
-                    <option value="g_s">g / segundo</option>
-                    <option value="kg_min">kg / minuto</option>
-                </select>
-            </div>
-        </div>
-
         <div class="result-box">
-            <h3>Resultados para el Panel Único:</h3>
+            <h3>Diagnóstico y Caudales Reales:</h3>
             <div class="result-row">
-                <span>Volumen de Cavidad (m³):</span>
-                <span id="p_vol">--</span>
-            </div>
-            <div class="result-row">
-                <span>Masa Libre de Laboratorio (kg):</span>
-                <span id="p_masa_libre">--</span>
-            </div>
-            <div class="result-row" style="border-top: 1px solid #bbf7d0; padding-top: 4px;">
-                <span>Masa Inyectada Requerida (kg):</span>
-                <span id="p_masa_cub">--</span>
+                <span>Caudal Poliol:</span>
+                <span id="cal_caudal_pol">--</span>
             </div>
             <div class="result-row">
-                <span>• Poliol a Inyectar (kg):</span>
-                <span id="p_poliol">--</span>
+                <span>Caudal Isocianato:</span>
+                <span id="cal_caudal_iso">--</span>
             </div>
-            <div class="result-row">
-                <span>• Isocianato a Inyectar (kg):</span>
-                <span id="p_iso">--</span>
-            </div>
-            <div class="result-row" style="border-top: 2px solid #166534; padding-top: 6px; margin-top: 6px; font-size: 1.05rem;">
-                <span>Tiempo de Disparo Requerido:</span>
-                <span id="p_tiempo_disparo" style="color: #15803d; font-weight: 800;">--</span>
+            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 5px; margin-top: 5px;">
+                <span>Relación Real Obtenida:</span>
+                <span id="cal_rel_real" style="color: #1d4ed8;">--</span>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 3: FURGONES / Cavas -->
-    <div id="sec_furgones" class="calc-section card">
-        <h2><span>3. Furgones y Cavas Térmicas</span></h2>
-        
-        <div class="diagram-card">
-            <svg width="280" height="150" viewBox="0 0 280 150">
-                <polygon points="40,90 180,90 220,50 80,50" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
-                <polygon points="40,90 180,90 180,130 40,130" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="2"/>
-                <polygon points="180,90 220,50 220,90 180,130" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
-                <polygon points="40,90 80,50 40,50" fill="#3b82f6" opacity="0.6"/>
-                <text x="110" y="143" font-size="11" font-weight="bold" fill="#1e3a8a">Largo (L)</text>
-                <text x="205" y="115" font-size="11" font-weight="bold" fill="#1e3a8a">Ancho (A)</text>
-                <text x="25" y="115" font-size="11" font-weight="bold" fill="#1e3a8a">Alto (H)</text>
-                <text x="50" y="75" font-size="10" fill="#991b1b" font-weight="bold">Frontal</text>
-                <text x="185" y="75" font-size="10" fill="#dc2626" font-weight="bold">Puertas (Sep)</text>
-            </svg>
+    <!-- SECCIÓN 3: CONVERSIÓN COMERCIAL GALONES A KILOS -->
+    <div id="sec_conversiones" class="calc-section card">
+        <h2><span>3. Conversor Comercial (Galones ⇄ Kilos - Empaques Alvaher)</span></h2>
+        <p class="note" style="margin-bottom: 12px;">Basado en tambores de 55 galones: Isocianato = 250 kg | Poliol = 230 kg.</p>
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Galones de Poliol</label>
+                <input type="number" id="conv_gal_pol" value="55" step="1" oninput="calcConvPoliol()">
+            </div>
+            <div class="input-group">
+                <label>Equivalente en Kilos (Poliol)</label>
+                <input type="number" id="conv_kg_pol" value="230" step="1" oninput="calcConvPoliolKg()">
+            </div>
         </div>
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Galones de Isocianato</label>
+                <input type="number" id="conv_gal_iso" value="55" step="1" oninput="calcConvIso()">
+            </div>
+            <div class="input-group">
+                <label>Equivalente en Kilos (Isocianato)</label>
+                <input type="number" id="conv_kg_iso" value="250" step="1" oninput="calcConvIsoKg()">
+            </div>
+        </div>
+    </div>
 
-        <div class="highlight-box">
-            <strong>Discriminación de Inyección:</strong><br>
-            • <strong>Estructura Principal (4 Paredes + Frontal):</strong> Masa requerida para las 2 paredes laterales largas, piso, techo y frontal.<br>
-            • <strong>Puertas Traseras (Inyección por Separado):</strong> Masa requerida únicamente para el juego de puertas traseras (superficie equivalente al marco frontal: Ancho x Alto).
-        </div>
-        
+    <!-- SECCIÓN 4: FURGON / CAVAS -->
+    <div id="sec_furgones" class="calc-section card">
+        <h2><span>4. Furgones y Cavas Térmicas</span></h2>
         <div class="form-grid">
             <div class="input-group">
                 <label>Largo del Furgón (m)</label>
@@ -309,162 +229,73 @@
                 <input type="number" id="f_ancho" value="2.40" step="0.01" oninput="calcFurgon()">
             </div>
             <div class="input-group">
-                <label>Espesor Aislamiento (m) [Ej: 0.08m]</label>
+                <label>Espesor Aislamiento (m)</label>
                 <input type="number" id="f_espesor" value="0.08" step="0.01" oninput="calcFurgon()">
             </div>
-        </div>
-
-        <div class="form-grid">
             <div class="input-group">
-                <label>Densidad Libre (kg/m³)</label>
-                <input type="number" id="f_dens_libre" value="35" oninput="calcFurgon()">
-            </div>
-            <div class="input-group">
-                <label>Densidad Cubicada / Inyectada (kg/m³)</label>
-                <input type="number" id="f_dens_cub" value="42" oninput="calcFurgon()">
+                <label>Densidad Inyectada (kg/m³)</label>
+                <input type="number" id="f_dens" value="42" oninput="calcFurgon()">
             </div>
         </div>
-
         <div class="result-box">
-            <h3>1. Estructura Principal del Furgón (4 Paredes + Frontal):</h3>
+            <h3>Resultado de Consumo para Furgón:</h3>
             <div class="result-row">
-                <span>Volumen Estructura Principal (m³):</span>
-                <span id="f_vol_struct">--</span>
+                <span>Volumen Total Cavidades:</span>
+                <span id="f_vol">--</span>
             </div>
             <div class="result-row">
-                <span>Masa Inyección Estructura (kg):</span>
-                <span id="f_masa_struct">--</span>
+                <span>Masa Total Poliuretano:</span>
+                <span id="f_masa">--</span>
             </div>
             <div class="result-row">
-                <span>&nbsp;&nbsp;• Poliol Estructura (kg):</span>
-                <span id="f_poliol_struct">--</span>
+                <span>• Poliol Requerido:</span>
+                <span id="f_pol">--</span>
             </div>
             <div class="result-row">
-                <span>&nbsp;&nbsp;• Isocianato Estructura (kg):</span>
-                <span id="f_iso_struct">--</span>
-            </div>
-        </div>
-
-        <div class="result-box" style="background: #fffbe5; border-color: #fde68a;">
-            <h3 style="color: #92400e;">2. Puertas Traseras (Inyección por Separado):</h3>
-            <div class="result-row">
-                <span>Volumen Puertas (m³):</span>
-                <span id="f_vol_puertas" style="color: #78350f;">--</span>
-            </div>
-            <div class="result-row">
-                <span>Masa Inyección Puertas (kg):</span>
-                <span id="f_masa_puertas" style="color: #78350f;">--</span>
-            </div>
-            <div class="result-row">
-                <span>&nbsp;&nbsp;• Poliol Puertas (kg):</span>
-                <span id="f_poliol_puertas" style="color: #78350f;">--</span>
-            </div>
-            <div class="result-row">
-                <span>&nbsp;&nbsp;• Isocianato Puertas (kg):</span>
-                <span id="f_iso_puertas" style="color: #78350f;">--</span>
-            </div>
-        </div>
-
-        <div class="result-box" style="background: #f0fdf4; border-color: #bbf7d0;">
-            <h3 style="color: #166534;">3. Consumo Total Completo (Furgón + Puertas):</h3>
-            <div class="result-row">
-                <span>Volumen Total Cavidades (m³):</span>
-                <span id="f_vol_total">--</span>
-            </div>
-            <div class="result-row">
-                <span>Masa Total General (kg):</span>
-                <span id="f_masa_total">--</span>
-            </div>
-            <div class="result-row">
-                <span>Poliol Total General (kg):</span>
-                <span id="f_poliol_kg">--</span>
-            </div>
-            <div class="result-row">
-                <span>Isocianato Total General (kg):</span>
-                <span id="f_iso_kg">--</span>
+                <span>• Isocianato Requerido:</span>
+                <span id="f_iso">--</span>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 4: TUBERÍAS -->
+    <!-- SECCIÓN 5: TUBERÍAS -->
     <div id="sec_tuberias" class="calc-section card">
-        <h2><span>4. Aislamiento de Tuberías</span></h2>
-        
-        <div class="diagram-card">
-            <svg width="340" height="180" viewBox="0 0 340 180" style="background:#ffffff; border-radius:8px; border:1px solid #e2e8f0;">
-                <circle cx="110" cy="90" r="70" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-                <circle cx="110" cy="90" r="35" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
-                <circle cx="110" cy="90" r="3" fill="#1e293b"/>
-                
-                <line x1="75" y1="90" x2="145" y1="90" stroke="#0f172a" stroke-width="1.5" stroke-dasharray="3"/>
-                <line x1="75" y1="85" x2="75" y2="95" stroke="#0f172a" stroke-width="1.5"/>
-                <line x1="145" y1="85" x2="145" y1="95" stroke="#0f172a" stroke-width="1.5"/>
-                <text x="110" y="83" font-size="10" font-weight="bold" fill="#0f172a" text-anchor="middle">Diámetro Tubería (Ø int)</text>
-                
-                <line x1="145" y1="90" x2="180" y1="90" stroke="#dc2626" stroke-width="2"/>
-                <line x1="180" y1="83" x2="180" y1="97" stroke="#dc2626" stroke-width="2"/>
-                <text x="162" y="80" font-size="10" font-weight="bold" fill="#dc2626" text-anchor="middle">Espesor (e)</text>
-
-                <path d="M110,20 L270,20 A70,70 0 0,1 270,160 L110,160" fill="none" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4"/>
-                <line x1="110" y1="20" x2="270" y1="20" stroke="#2563eb" stroke-width="2"/>
-                <line x1="110" y1="160" x2="270" y1="160" stroke="#2563eb" stroke-width="2"/>
-                <line x1="270" y1="90" x2="330" y1="90" stroke="#1e3a8a" stroke-width="1.5"/>
-                <text x="210" y="85" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">Longitud (L)</text>
-                
-                <rect x="10" y="145" width="120" height="25" rx="4" fill="#eff6ff" stroke="#bfdbfe"/>
-                <text x="70" y="161" font-size="9" font-weight="bold" fill="#1e40af" text-anchor="middle">Ánulo = Volumen Aislamiento</text>
-            </svg>
-        </div>
-
-        <div class="highlight-box">
-            <strong>Aclaración según Fórmulas de Geometría del Excel:</strong><br>
-            • <strong>Diámetro de la Tubería:</strong> Es el <u>diámetro exterior de la tubería metálica</u> (o interior del aislamiento).<br>
-            • <strong>Diámetro Exterior Total:</strong> Øext = Øtuberia + (2 x Espesor).<br>
-            • <strong>Densidad del PIR / PUR:</strong> Corresponde a la <u>densidad de inyección o cubicación</u> en el molde o media caña (ej. 37 - 40 kg/m³).
-        </div>
-
+        <h2><span>5. Aislamiento de Tuberías</span></h2>
         <div class="form-grid">
             <div class="input-group">
-                <label>Longitud de Tubería a Aislar (m)</label>
+                <label>Longitud de Tubería (m)</label>
                 <input type="number" id="t_long" value="10" step="1" oninput="calcTuberia()">
             </div>
             <div class="input-group">
-                <label>Diámetro de Tubería (pulgadas)</label>
+                <label>Diámetro Tubería (pulg)</label>
                 <input type="number" id="t_diam" value="4" step="0.5" oninput="calcTuberia()">
-                <span class="conversion-tag" id="t_diam_conv">= 10.16 cm = 0.1016 m</span>
             </div>
             <div class="input-group">
-                <label>Espesor del Aislamiento (pulgadas)</label>
+                <label>Espesor Aislamiento (pulg)</label>
                 <input type="number" id="t_esp" value="2" step="0.5" oninput="calcTuberia()">
-                <span class="conversion-tag" id="t_esp_conv">= 5.08 cm = 0.0508 m</span>
             </div>
             <div class="input-group">
-                <label>Densidad del PUR / PIR (kg/m³)</label>
+                <label>Densidad PUR (kg/m³)</label>
                 <input type="number" id="t_dens" value="37" oninput="calcTuberia()">
             </div>
         </div>
-
         <div class="result-box">
-            <h3>Resultados de Requerimiento (Modelo Excel):</h3>
-            <div class="result-row">
-                <span>Diámetro Exterior Total con Aislamiento:</span>
-                <span id="t_diam_ext_total">--</span>
-            </div>
+            <h3>Resultado para Tubería:</h3>
             <div class="result-row">
                 <span>Volumen del Ánulo:</span>
                 <span id="t_vol">--</span>
             </div>
-            <div class="result-row" style="border-top: 1px solid #bbf7d0; padding-top: 4px;">
-                <span>Cantidad Requerida de POLIURETANO (Total PUR/PIR):</span>
+            <div class="result-row">
+                <span>Masa Total PUR:</span>
                 <span id="t_masa">--</span>
             </div>
             <div class="result-row">
-                <span>Cantidad Requerida de Isocianato (Pronate TRG192):</span>
-                <span id="t_iso">--</span>
+                <span>• Poliol Requerido:</span>
+                <span id="t_pol">--</span>
             </div>
             <div class="result-row">
-                <span>Cantidad Requerida de Poliol (Espol TRG012 / TPL001):</span>
-                <span id="t_poliol">--</span>
+                <span>• Isocianato Requerido:</span>
+                <span id="t_iso">--</span>
             </div>
         </div>
     </div>
@@ -472,223 +303,81 @@
 
 <script>
     function mostrarSeccion(idSeccion) {
-        var secciones = document.querySelectorAll('.calc-section');
-        secciones.forEach(function(sec) {
-            sec.style.display = 'none';
-        });
-
-        var botones = document.querySelectorAll('.menu-card-btn');
-        botones.forEach(function(btn) {
-            btn.classList.remove('active');
-        });
-
+        document.querySelectorAll('.calc-section').forEach(sec => sec.style.display = 'none');
+        document.querySelectorAll('.menu-card-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(idSeccion).style.display = 'block';
         document.getElementById('btn_' + idSeccion).classList.add('active');
     }
 
-    function setRelationParts(pol, iso) {
-        document.getElementById('partPoliol').value = pol;
-        document.getElementById('partIso').value = iso;
-        calculateFromParts();
-    }
-
-    function setRelationDecimal(rPolIso) {
-        document.getElementById('ratioPolIso').value = rPolIso;
-        calculateFromRatioPolIso();
-    }
-
-    function getParts() {
-        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
-        let i = parseFloat(document.getElementById('partIso').value) || 0;
-        return { p, i };
-    }
-
-    function calculateFromRatioPolIso() {
-        let rPolIso = parseFloat(document.getElementById('ratioPolIso').value) || 0;
-        if (rPolIso <= 0) return;
-        let rIsoPol = 1 / rPolIso;
-        document.getElementById('ratioIsoPol').value = rIsoPol.toFixed(3);
-
-        let p = 100;
-        let i = p * rIsoPol;
-        document.getElementById('partPoliol').value = 100;
-        document.getElementById('partIso').value = i.toFixed(2);
-
-        let total = p + i;
-        document.getElementById('pctPoliol').value = ((p / total) * 100).toFixed(2);
-        document.getElementById('pctIso').value = ((i / total) * 100).toFixed(2);
-        updateAllCalculations();
-    }
-
-    function calculateFromRatioIsoPol() {
-        let rIsoPol = parseFloat(document.getElementById('ratioIsoPol').value) || 0;
-        if (rIsoPol <= 0) return;
-        let rPolIso = 1 / rIsoPol;
-        document.getElementById('ratioPolIso').value = rPolIso.toFixed(3);
-
-        let p = 100;
-        let i = p * rIsoPol;
-        document.getElementById('partPoliol').value = 100;
-        document.getElementById('partIso').value = i.toFixed(2);
-
-        let total = p + i;
-        document.getElementById('pctPoliol').value = ((p / total) * 100).toFixed(2);
-        document.getElementById('pctIso').value = ((i / total) * 100).toFixed(2);
-        updateAllCalculations();
-    }
-
-    function calculateFromParts() {
-        let { p, i } = getParts();
-        if (p <= 0) p = 1;
-        let rIsoPol = i / p;
-        let rPolIso = p / (i || 1);
-        let total = p + i;
-
-        document.getElementById('ratioIsoPol').value = rIsoPol.toFixed(3);
-        document.getElementById('ratioPolIso').value = rPolIso.toFixed(3);
-        document.getElementById('pctPoliol').value = ((p / total) * 100).toFixed(2);
-        document.getElementById('pctIso').value = ((i / total) * 100).toFixed(2);
-        updateAllCalculations();
-    }
-
-    function calculateFromPctPoliol() {
-        let pctP = parseFloat(document.getElementById('pctPoliol').value) || 0;
-        if (pctP <= 0) pctP = 1; if (pctP >= 100) pctP = 99;
-        let pctI = 100 - pctP;
-        document.getElementById('pctIso').value = pctI.toFixed(2);
-
-        let p = 100;
-        let i = (pctI * p) / pctP;
-        document.getElementById('partPoliol').value = 100;
-        document.getElementById('partIso').value = i.toFixed(2);
-        document.getElementById('ratioIsoPol').value = (i / p).toFixed(3);
-        document.getElementById('ratioPolIso').value = (p / i).toFixed(3);
-        updateAllCalculations();
-    }
-
-    function calculateFromPctIso() {
-        let pctI = parseFloat(document.getElementById('pctIso').value) || 0;
-        if (pctI <= 0) pctI = 1; if (pctI >= 100) pctI = 99;
-        let pctP = 100 - pctI;
-        document.getElementById('pctPoliol').value = pctP.toFixed(2);
-
-        let p = 100;
-        let i = (pctI * p) / pctP;
-        document.getElementById('partPoliol').value = 100;
-        document.getElementById('partIso').value = i.toFixed(2);
-        document.getElementById('ratioIsoPol').value = (i / p).toFixed(3);
-        document.getElementById('ratioPolIso').value = (p / i).toFixed(3);
-        updateAllCalculations();
-    }
-
-    function updateAllCalculations() {
+    function setParts(p, i) {
+        document.getElementById('partPoliol').value = p;
+        document.getElementById('partIso').value = i;
         calculateBatch();
-        calcPanel();
-        calcFurgon();
-        calcTuberia();
     }
 
     function calculateBatch() {
-        let { p, i } = getParts();
-        let totalParts = p + i;
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
         let totalMasa = parseFloat(document.getElementById('totalMasa').value) || 0;
         let unidad = document.getElementById('unidadMasa').value;
-
-        if (totalParts <= 0) return;
-
-        let masaPoliol = (p / totalParts) * totalMasa;
-        let masaIso = (i / totalParts) * totalMasa;
-
-        document.getElementById('resPoliol').innerText = masaPoliol.toFixed(2) + " " + unidad;
-        document.getElementById('resIso').innerText = masaIso.toFixed(2) + " " + unidad;
+        let suma = p + i;
+        if(suma <= 0) return;
+        let mPol = (p / suma) * totalMasa;
+        let mIso = (i / suma) * totalMasa;
+        document.getElementById('resPoliol').innerText = mPol.toFixed(2) + " " + unidad;
+        document.getElementById('resIso').innerText = mIso.toFixed(2) + " " + unidad;
         document.getElementById('resTotal').innerText = totalMasa.toFixed(2) + " " + unidad;
     }
 
-    function calcPanel() {
-        let largo = parseFloat(document.getElementById('p_largo').value) || 0;
-        let alto = parseFloat(document.getElementById('p_alto').value) || 0;
-        let espesor = parseFloat(document.getElementById('p_espesor').value) || 0;
-        let densLibre = parseFloat(document.getElementById('p_dens_libre').value) || 0;
-        let densCub = parseFloat(document.getElementById('p_dens_cub').value) || 0;
-        let caudalInput = parseFloat(document.getElementById('p_caudal').value) || 0;
-        let unidadCaudal = document.getElementById('p_unidad_caudal').value;
+    function calcCalibracion() {
+        let t = parseFloat(document.getElementById('cal_tiempo').value) || 1;
+        let gPol = parseFloat(document.getElementById('cal_gramos_pol').value) || 0;
+        let gIso = parseFloat(document.getElementById('cal_gramos_iso').value) || 0;
+        let cPolGps = gPol / t;
+        let cIsoGps = gIso / t;
+        let rel = gPol > 0 ? (gIso / gPol) : 0;
+        document.getElementById('cal_caudal_pol').innerText = cPolGps.toFixed(1) + " g/s (" + (cPolGps*60/1000).toFixed(2) + " kg/min)";
+        document.getElementById('cal_caudal_iso').innerText = cIsoGps.toFixed(1) + " g/s (" + (cIsoGps*60/1000).toFixed(2) + " kg/min)";
+        document.getElementById('cal_rel_real').innerText = "1 : " + rel.toFixed(3) + " (Poliol 100 : Iso " + (rel*100).toFixed(1) + ")";
+    }
 
-        let vol = largo * alto * espesor;
-        let masaLibre = vol * densLibre;
-        let masaCub = vol * densCub;
-
-        let { p, i } = getParts();
-        let totalParts = p + i;
-        let pol = totalParts > 0 ? (p / totalParts) * masaCub : 0;
-        let iso = totalParts > 0 ? (i / totalParts) * masaCub : 0;
-
-        let caudalKgS = caudalInput;
-        if (unidadCaudal === 'g_s') {
-            caudalKgS = caudalInput / 1000.0;
-        } else if (unidadCaudal === 'kg_min') {
-            caudalKgS = caudalInput / 60.0;
-        }
-
-        let tiempoSeg = caudalKgS > 0 ? (masaCub / caudalKgS) : 0;
-
-        document.getElementById('p_vol').innerText = vol.toFixed(4) + " m³";
-        document.getElementById('p_masa_libre').innerText = masaLibre.toFixed(2) + " kg";
-        document.getElementById('p_masa_cub').innerText = masaCub.toFixed(2) + " kg";
-        document.getElementById('p_poliol').innerText = pol.toFixed(2) + " kg";
-        document.getElementById('p_iso').innerText = iso.toFixed(2) + " kg";
-        
-        if (tiempoSeg > 0) {
-            document.getElementById('p_tiempo_disparo').innerText = tiempoSeg.toFixed(2) + " segundos";
-        } else {
-            document.getElementById('p_tiempo_disparo').innerText = "--";
-        }
+    function calcConvPoliol() {
+        let gal = parseFloat(document.getElementById('conv_gal_pol').value) || 0;
+        document.getElementById('conv_kg_pol').value = (gal * (230 / 55)).toFixed(1);
+    }
+    function calcConvPoliolKg() {
+        let kg = parseFloat(document.getElementById('conv_kg_pol').value) || 0;
+        document.getElementById('conv_gal_pol').value = (kg * (55 / 230)).toFixed(1);
+    }
+    function calcConvIso() {
+        let gal = parseFloat(document.getElementById('conv_gal_iso').value) || 0;
+        document.getElementById('conv_kg_iso').value = (gal * (250 / 55)).toFixed(1);
+    }
+    function calcConvIsoKg() {
+        let kg = parseFloat(document.getElementById('conv_kg_iso').value) || 0;
+        document.getElementById('conv_gal_iso').value = (kg * (55 / 250)).toFixed(1);
     }
 
     function calcFurgon() {
-        let largo = parseFloat(document.getElementById('f_largo').value) || 0;
-        let alto = parseFloat(document.getElementById('f_alto').value) || 0;
-        let ancho = parseFloat(document.getElementById('f_ancho').value) || 0;
-        let espesor = parseFloat(document.getElementById('f_espesor').value) || 0;
-        let densCub = parseFloat(document.getElementById('f_dens_cub').value) || 0;
+        let l = parseFloat(document.getElementById('f_largo').value) || 0;
+        let h = parseFloat(document.getElementById('f_alto').value) || 0;
+        let a = parseFloat(document.getElementById('f_ancho').value) || 0;
+        let esp = parseFloat(document.getElementById('f_espesor').value) || 0;
+        let dens = parseFloat(document.getElementById('f_dens').value) || 0;
+        
+        // 4 paredes + techo/piso + puertas
+        let vol = (2*(l*h*esp) + 2*(l*a*esp) + (a*h*esp) + (a*h*esp));
+        let masa = vol * dens;
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        let suma = p + i;
+        let mPol = suma > 0 ? (p / suma) * masa : 0;
+        let mIso = suma > 0 ? (i / suma) * masa : 0;
 
-        let { p, i } = getParts();
-        let totalParts = p + i;
-
-        let volParedesLargas = 2 * (largo * alto * espesor);
-        let volPisoTecho = 2 * (largo * ancho * espesor);
-        let volFrontal = ancho * alto * espesor;
-        let volStruct = volParedesLargas + volPisoTecho + volFrontal;
-        let masaStruct = volStruct * densCub;
-
-        let polStruct = totalParts > 0 ? (p / totalParts) * masaStruct : 0;
-        let isoStruct = totalParts > 0 ? (i / totalParts) * masaStruct : 0;
-
-        let volPuertas = ancho * alto * espesor;
-        let masaPuertas = volPuertas * densCub;
-
-        let polPuertas = totalParts > 0 ? (p / totalParts) * masaPuertas : 0;
-        let isoPuertas = totalParts > 0 ? (i / totalParts) * masaPuertas : 0;
-
-        let volTotal = volStruct + volPuertas;
-        let masaTotal = masaStruct + masaPuertas;
-
-        let polTotal = totalParts > 0 ? (p / totalParts) * masaTotal : 0;
-        let isoTotal = totalParts > 0 ? (i / totalParts) * masaTotal : 0;
-
-        document.getElementById('f_vol_struct').innerText = volStruct.toFixed(4) + " m³";
-        document.getElementById('f_masa_struct').innerText = masaStruct.toFixed(2) + " kg";
-        document.getElementById('f_poliol_struct').innerText = polStruct.toFixed(2) + " kg";
-        document.getElementById('f_iso_struct').innerText = isoStruct.toFixed(2) + " kg";
-
-        document.getElementById('f_vol_puertas').innerText = volPuertas.toFixed(4) + " m³";
-        document.getElementById('f_masa_puertas').innerText = masaPuertas.toFixed(2) + " kg";
-        document.getElementById('f_poliol_puertas').innerText = polPuertas.toFixed(2) + " kg";
-        document.getElementById('f_iso_puertas').innerText = isoPuertas.toFixed(2) + " kg";
-
-        document.getElementById('f_vol_total').innerText = volTotal.toFixed(4) + " m³";
-        document.getElementById('f_masa_total').innerText = masaTotal.toFixed(2) + " kg";
-        document.getElementById('f_poliol_kg').innerText = polTotal.toFixed(2) + " kg";
-        document.getElementById('f_iso_kg').innerText = isoTotal.toFixed(2) + " kg";
+        document.getElementById('f_vol').innerText = vol.toFixed(4) + " m³";
+        document.getElementById('f_masa').innerText = masa.toFixed(2) + " kg";
+        document.getElementById('f_pol').innerText = mPol.toFixed(2) + " kg";
+        document.getElementById('f_iso').innerText = mIso.toFixed(2) + " kg";
     }
 
     function calcTuberia() {
@@ -697,35 +386,28 @@
         let espPulg = parseFloat(document.getElementById('t_esp').value) || 0;
         let dens = parseFloat(document.getElementById('t_dens').value) || 0;
 
-        let diamCm = diamPulg * 2.54;
-        let diamMetros = diamPulg * 0.0254;
-        document.getElementById('t_diam_conv').innerText = "= " + diamCm.toFixed(2) + " cm = " + diamMetros.toFixed(4) + " m";
+        let rInt = (diamPulg * 0.0254) / 2;
+        let rExt = rInt + (espPulg * 0.0254);
+        let vol = Math.PI * (Math.pow(rExt, 2) - Math.pow(rInt, 2)) * long;
+        let masa = vol * dens;
 
-        let espCm = espPulg * 2.54;
-        let espMetros = espPulg * 0.0254;
-        document.getElementById('t_esp_conv').innerText = "= " + espCm.toFixed(2) + " cm = " + espMetros.toFixed(4) + " m";
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        let suma = p + i;
+        let mPol = suma > 0 ? (p / suma) * masa : 0;
+        let mIso = suma > 0 ? (i / suma) * masa : 0;
 
-        let diamExtMetros = diamMetros + (2 * espMetros);
-        document.getElementById('t_diam_ext_total').innerText = (diamExtMetros * 39.3701).toFixed(2) + " pulg (" + diamExtMetros.toFixed(4) + " m)";
-
-        let rInt = diamMetros / 2;
-        let rExt = diamExtMetros / 2;
-        let volAnulo = Math.PI * (Math.pow(rExt, 2) - Math.pow(rInt, 2)) * long;
-        let masaTotal = volAnulo * dens;
-
-        let { p, i } = getParts();
-        let totalParts = p + i;
-        let pol = totalParts > 0 ? (p / totalParts) * masaTotal : 0;
-        let iso = totalParts > 0 ? (i / totalParts) * masaTotal : 0;
-
-        document.getElementById('t_vol').innerText = volAnulo.toFixed(6) + " m³";
-        document.getElementById('t_masa').innerText = masaTotal.toFixed(3) + " kg";
-        document.getElementById('t_iso').innerText = iso.toFixed(3) + " kg";
-        document.getElementById('t_poliol').innerText = pol.toFixed(3) + " kg";
+        document.getElementById('t_vol').innerText = vol.toFixed(5) + " m³";
+        document.getElementById('t_masa').innerText = masa.toFixed(3) + " kg";
+        document.getElementById('t_pol').innerText = mPol.toFixed(3) + " kg";
+        document.getElementById('t_iso').innerText = mIso.toFixed(3) + " kg";
     }
 
     window.onload = function() {
-        calculateFromParts();
+        calculateBatch();
+        calcCalibracion();
+        calcFurgon();
+        calcTuberia();
     };
 </script>
 </body>
