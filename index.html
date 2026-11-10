@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Industrial de Poliuretano | Alvaher & Espumlátex S.A.</title>
     
-    <!-- ETIQUETAS DE VISTA PREVIA PARA WHATSAPP Y REDES SOCIALES -->
+    <!-- ETIQUETAS DE VISTA PREVIA PARA WHATSAPP -->
     <meta property="og:title" content="Calculadora Industrial PUR/PIR - Alvaher & Espumlátex S.A.">
-    <meta property="og:description" content="Herramienta técnica interactiva: Dosificación, Calibración de Bombas, Conversor Galones/Kilos, Furgones y Tuberías.">
+    <meta property="og:description" content="Herramienta técnica interactiva: Dosificación, Calibración de Bombas, Conversor Galones/Kilos, Paneles, Furgones y Tuberías.">
     <meta property="og:image" content="https://espumlatex.com.co/wp-content/uploads/2021/04/Logo-base-azul-corporativo-1024x549.png">
     <meta property="og:type" content="website">
 
@@ -24,48 +24,54 @@
             --radius: 12px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); padding: 15px; line-height: 1.5; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 15px; line-height: 1.4; }
         .container { max-width: 850px; margin: 0 auto; }
-        header { text-align: center; margin-bottom: 20px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 25px 20px; border-radius: var(--radius); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header h1 { font-size: 1.4rem; margin-bottom: 6px; }
-        header p { font-size: 0.85rem; opacity: 0.95; }
+        
+        header { text-align: center; margin-bottom: 15px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 18px 15px; border-radius: var(--radius); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { font-size: 1.25rem; margin-bottom: 4px; }
+        header p { font-size: 0.8rem; opacity: 0.95; }
 
-        /* MENÚ DE PESTAÑAS */
-        .dashboard-menu { background: white; border-radius: var(--radius); padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #e2e8f0; }
-        .dashboard-menu h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
-        .menu-card-btn { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 8px; text-align: center; color: var(--text-main); font-weight: 600; font-size: 0.78rem; transition: all 0.2s; display: flex; flex-direction: column; gap: 4px; align-items: center; cursor: pointer; }
-        .menu-card-btn:hover { background: #e2e8f0; border-color: #94a3b8; }
-        .menu-card-btn.active { background: #eff6ff; border-color: var(--primary-light); color: var(--primary); box-shadow: 0 4px 6px rgba(59,130,246,0.15); }
-        .menu-card-btn span.icon { font-size: 1.2rem; }
+        /* MENÚ PRINCIPAL TIPO TARJETAS (PANTALLA INICIAL) */
+        .dashboard-menu { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 15px; }
+        .dashboard-menu h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .menu-card-btn { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 12px; padding: 15px; text-align: center; color: var(--text-main); font-weight: 600; font-size: 0.9rem; transition: all 0.2s; display: flex; flex-direction: column; gap: 6px; align-items: center; cursor: pointer; }
+        .menu-card-btn:hover { background: #eff6ff; border-color: var(--primary-light); color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(59,130,246,0.15); }
+        .menu-card-btn span.icon { font-size: 1.6rem; }
 
-        /* SECCIONES */
+        /* SECCIONES DE CÁLCULO */
         .calc-section { display: none; }
-        .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #e2e8f0; }
-        .card h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+        .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+        .card h2 { font-size: 1.1rem; color: var(--primary); }
+        
+        /* BOTÓN DE RETORNO AL MENÚ PRINCIPAL */
+        .back-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: var(--text-main); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .back-btn:hover { background: #e2e8f0; }
 
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
-        .input-group { display: flex; flex-direction: column; gap: 5px; }
-        label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-        input, select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; background: #fff; color: var(--text-main); }
+        .input-group { display: flex; flex-direction: column; gap: 4px; }
+        label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+        input, select { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; background: #fff; color: var(--text-main); }
         input:focus, select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
 
-        .presets { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-        .preset-chip { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 5px 10px; font-size: 0.78rem; border-radius: 20px; cursor: pointer; font-weight: 600; }
+        .presets { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        .preset-chip { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 4px 10px; font-size: 0.75rem; border-radius: 20px; cursor: pointer; font-weight: 600; }
         .preset-chip:hover { background: #dbeafe; }
 
-        .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px; margin-top: 15px; }
-        .result-box h3 { font-size: 0.95rem; color: #166534; margin-bottom: 8px; }
-        .result-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px; margin-top: 12px; }
+        .result-box h3 { font-size: 0.9rem; color: #166534; margin-bottom: 6px; }
+        .result-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem; }
         .result-row span:last-child { font-weight: 700; color: #14532d; }
-        .note { font-size: 0.78rem; color: var(--text-muted); font-style: italic; margin-top: 6px; }
+        .note { font-size: 0.75rem; color: var(--text-muted); font-style: italic; margin-top: 4px; }
     </style>
 </head>
 <body>
 <div class="container">
     <header>
-        <div style="background: white; display: inline-block; padding: 6px 20px; border-radius: 50px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-            <svg width="160" height="30" viewBox="0 0 200 35" xmlns="http://www.w3.org/2000/svg">
+        <div style="background: white; display: inline-block; padding: 5px 18px; border-radius: 50px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+            <svg width="150" height="28" viewBox="0 0 200 35" xmlns="http://www.w3.org/2000/svg">
                 <text x="0" y="27" font-family="'Segoe UI', Arial, sans-serif" font-size="26" font-weight="700" fill="#1e3a8a" letter-spacing="-0.5">Espumlátex<tspan font-size="13" dy="-12">®</tspan></text>
             </svg>
         </div>
@@ -73,38 +79,45 @@
         <p>Alvaher & Espumlátex S.A. | Desarrollo Comercial e Innovación</p>
     </header>
 
-    <!-- MENÚ DE PESTAÑAS -->
-    <div class="dashboard-menu">
-        <h3>Seleccione el módulo de trabajo:</h3>
+    <!-- MENÚ PRINCIPAL (PANTALLA DE INICIO) -->
+    <div id="menu_principal" class="dashboard-menu">
+        <h3>Seleccione el módulo de cálculo requerido:</h3>
         <div class="menu-grid">
-            <button id="btn_sec_relaciones" class="menu-card-btn active" onclick="mostrarSeccion('sec_relaciones')">
+            <button class="menu-card-btn" onclick="mostrarSeccion('sec_relaciones')">
                 <span class="icon">⚖️</span>
-                <span>Relación y Lote</span>
+                <span>Relación y Dosificación</span>
             </button>
-            <button id="btn_sec_calibracion" class="menu-card-btn" onclick="mostrarSeccion('sec_calibracion')">
+            <button class="menu-card-btn" onclick="mostrarSeccion('sec_calibracion')">
                 <span class="icon">⚙️</span>
-                <span>Calibración Bombas</span>
+                <span>Calibración de Bombas</span>
             </button>
-            <button id="btn_sec_conversiones" class="menu-card-btn" onclick="mostrarSeccion('sec_conversiones')">
+            <button class="menu-card-btn" onclick="mostrarSeccion('sec_conversiones')">
                 <span class="icon">🛢️</span>
-                <span>Galones ⇄ Kilos</span>
+                <span>Conversor Galones ⇄ Kilos</span>
             </button>
-            <button id="btn_sec_furgones" class="menu-card-btn" onclick="mostrarSeccion('sec_furgones')">
+            <button class="menu-card-btn" onclick="mostrarSeccion('sec_panel')">
+                <span class="icon">🧱</span>
+                <span>Panel Único y Calibración</span>
+            </button>
+            <button class="menu-card-btn" onclick="mostrarSeccion('sec_furgones')">
                 <span class="icon">🚚</span>
                 <span>Furgones y Cavas</span>
             </button>
-            <button id="btn_sec_tuberias" class="menu-card-btn" onclick="mostrarSeccion('sec_tuberias')">
+            <button class="menu-card-btn" onclick="mostrarSeccion('sec_tuberias')">
                 <span class="icon">🧪</span>
-                <span>Tuberías PUR</span>
+                <span>Aislamiento de Tuberías</span>
             </button>
         </div>
     </div>
 
-    <!-- SECCIÓN 1: RELACIÓN Y DOSIFICACIÓN -->
-    <div id="sec_relaciones" class="calc-section card" style="display: block;">
-        <h2><span>1. Relación de Mezcla y Dosificación de Lote</span></h2>
+    <!-- MÓDULO 1: RELACIÓN Y DOSIFICACIÓN -->
+    <div id="sec_relaciones" class="calc-section card">
+        <div class="card-header">
+            <h2>1. Relación de Mezcla y Dosificación</h2>
+            <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+        </div>
         <div class="presets">
-            <span style="font-size:0.8rem; align-self:center; font-weight:600;">Presets:</span>
+            <span style="font-size:0.78rem; align-self:center; font-weight:600;">Presets:</span>
             <button class="preset-chip" onclick="setParts(100, 100)">100 : 100</button>
             <button class="preset-chip" onclick="setParts(100, 105)">100 : 105</button>
             <button class="preset-chip" onclick="setParts(100, 110)">100 : 110</button>
@@ -144,28 +157,31 @@
                 <span>Isocianato Requerido:</span>
                 <span id="resIso">--</span>
             </div>
-            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 5px; margin-top: 5px;">
+            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 4px; margin-top: 4px;">
                 <span>Total Mezcla:</span>
                 <span id="resTotal">--</span>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 2: CALIBRACIÓN GRAVIMÉTRICA DE BOMBAS -->
+    <!-- MÓDULO 2: CALIBRACIÓN DE BOMBAS -->
     <div id="sec_calibracion" class="calc-section card">
-        <h2><span>2. Calibración Gravimétrica de Bombas en Planta/Campo</span></h2>
-        <p class="note" style="margin-bottom: 12px;">Mida los gramos arrojados por cada bomba en un tiempo de prueba (ej. 6 segundos) para verificar y ajustar la relación real.</p>
+        <div class="card-header">
+            <h2>2. Calibración Gravimétrica de Bombas</h2>
+            <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+        </div>
+        <p class="note" style="margin-bottom: 10px;">Ingrese el tiempo de prueba y los gramos recolectados en báscula para verificar la relación real.</p>
         <div class="form-grid">
             <div class="input-group">
-                <label>Tiempo de Disparo de Prueba (seg)</label>
+                <label>Tiempo de Disparo (seg)</label>
                 <input type="number" id="cal_tiempo" value="6" step="1" oninput="calcCalibracion()">
             </div>
             <div class="input-group">
-                <label>Gramos Poliol Recolectados (g)</label>
+                <label>Gramos Poliol (g)</label>
                 <input type="number" id="cal_gramos_pol" value="1200" step="10" oninput="calcCalibracion()">
             </div>
             <div class="input-group">
-                <label>Gramos Isocianato Recolectados (g)</label>
+                <label>Gramos Isocianato (g)</label>
                 <input type="number" id="cal_gramos_iso" value="1440" step="10" oninput="calcCalibracion()">
             </div>
         </div>
@@ -179,24 +195,27 @@
                 <span>Caudal Isocianato:</span>
                 <span id="cal_caudal_iso">--</span>
             </div>
-            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 5px; margin-top: 5px;">
+            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 4px; margin-top: 4px;">
                 <span>Relación Real Obtenida:</span>
                 <span id="cal_rel_real" style="color: #1d4ed8;">--</span>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 3: CONVERSIÓN COMERCIAL GALONES A KILOS -->
+    <!-- MÓDULO 3: CONVERSOR GALONES <-> KILOS -->
     <div id="sec_conversiones" class="calc-section card">
-        <h2><span>3. Conversor Comercial (Galones ⇄ Kilos - Empaques Alvaher)</span></h2>
-        <p class="note" style="margin-bottom: 12px;">Basado en tambores de 55 galones: Isocianato = 250 kg | Poliol = 230 kg.</p>
+        <div class="card-header">
+            <h2>3. Conversor Comercial (Galones ⇄ Kilos)</h2>
+            <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+        </div>
+        <p class="note" style="margin-bottom: 10px;">Equivalencia Alvaher: Tambor Iso (55 gal) = 250 kg | Tambor Poliol (55 gal) = 230 kg.</p>
         <div class="form-grid">
             <div class="input-group">
                 <label>Galones de Poliol</label>
                 <input type="number" id="conv_gal_pol" value="55" step="1" oninput="calcConvPoliol()">
             </div>
             <div class="input-group">
-                <label>Equivalente en Kilos (Poliol)</label>
+                <label>Kilos de Poliol</label>
                 <input type="number" id="conv_kg_pol" value="230" step="1" oninput="calcConvPoliolKg()">
             </div>
         </div>
@@ -206,15 +225,63 @@
                 <input type="number" id="conv_gal_iso" value="55" step="1" oninput="calcConvIso()">
             </div>
             <div class="input-group">
-                <label>Equivalente en Kilos (Isocianato)</label>
+                <label>Kilos de Isocianato</label>
                 <input type="number" id="conv_kg_iso" value="250" step="1" oninput="calcConvIsoKg()">
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 4: FURGON / CAVAS -->
+    <!-- MÓDULO 4: PANEL ÚNICO -->
+    <div id="sec_panel" class="calc-section card">
+        <div class="card-header">
+            <h2>4. Panel Único y Calibración</h2>
+            <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+        </div>
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Largo del Panel (m)</label>
+                <input type="number" id="p_largo" value="2.5" step="0.1" oninput="calcPanel()">
+            </div>
+            <div class="input-group">
+                <label>Alto / Ancho (m)</label>
+                <input type="number" id="p_alto" value="1.2" step="0.01" oninput="calcPanel()">
+            </div>
+            <div class="input-group">
+                <label>Espesor (m)</label>
+                <input type="number" id="p_espesor" value="0.05" step="0.01" oninput="calcPanel()">
+            </div>
+            <div class="input-group">
+                <label>Densidad Inyectada (kg/m³)</label>
+                <input type="number" id="p_dens" value="42" oninput="calcPanel()">
+            </div>
+        </div>
+        <div class="result-box">
+            <h3>Resultado para Panel Único:</h3>
+            <div class="result-row">
+                <span>Volumen de Cavidad:</span>
+                <span id="p_vol">--</span>
+            </div>
+            <div class="result-row">
+                <span>Masa Inyectada Requerida:</span>
+                <span id="p_masa">--</span>
+            </div>
+            <div class="result-row">
+                <span>• Poliol Requerido:</span>
+                <span id="p_pol">--</span>
+            </div>
+            <div class="result-row">
+                <span>• Isocianato Requerido:</span>
+                <span id="p_iso">--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MÓDULO 5: FURGONES -->
     <div id="sec_furgones" class="calc-section card">
-        <h2><span>4. Furgones y Cavas Térmicas</span></h2>
+        <div class="card-header">
+            <h2>5. Furgones y Cavas Térmicas</h2>
+            <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+        </div>
         <div class="form-grid">
             <div class="input-group">
                 <label>Largo del Furgón (m)</label>
@@ -258,12 +325,15 @@
         </div>
     </div>
 
-    <!-- SECCIÓN 5: TUBERÍAS -->
+    <!-- MÓDULO 6: TUBERÍAS -->
     <div id="sec_tuberias" class="calc-section card">
-        <h2><span>5. Aislamiento de Tuberías</span></h2>
+        <div class="card-header">
+            <h2>6. Aislamiento de Tuberías</h2>
+            <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+        </div>
         <div class="form-grid">
             <div class="input-group">
-                <label>Longitud de Tubería (m)</label>
+                <label>Longitud Tubería (m)</label>
                 <input type="number" id="t_long" value="10" step="1" oninput="calcTuberia()">
             </div>
             <div class="input-group">
@@ -302,11 +372,18 @@
 </div>
 
 <script>
+    // CONTROL DE NAVEGACIÓN POR PANTALLAS (SIN SCROLL / TIPO PÁGINA INDependIENTE)
     function mostrarSeccion(idSeccion) {
+        document.getElementById('menu_principal').style.display = 'none';
         document.querySelectorAll('.calc-section').forEach(sec => sec.style.display = 'none');
-        document.querySelectorAll('.menu-card-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(idSeccion).style.display = 'block';
-        document.getElementById('btn_' + idSeccion).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function irAlMenu() {
+        document.querySelectorAll('.calc-section').forEach(sec => sec.style.display = 'none');
+        document.getElementById('menu_principal').style.display = 'block';
+        window.scrollTo(0, 0);
     }
 
     function setParts(p, i) {
@@ -358,6 +435,25 @@
         document.getElementById('conv_gal_iso').value = (kg * (55 / 250)).toFixed(1);
     }
 
+    function calcPanel() {
+        let l = parseFloat(document.getElementById('p_largo').value) || 0;
+        let h = parseFloat(document.getElementById('p_alto').value) || 0;
+        let esp = parseFloat(document.getElementById('p_espesor').value) || 0;
+        let dens = parseFloat(document.getElementById('p_dens').value) || 0;
+        let vol = l * h * esp;
+        let masa = vol * dens;
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        let suma = p + i;
+        let mPol = suma > 0 ? (p / suma) * masa : 0;
+        let mIso = suma > 0 ? (i / suma) * masa : 0;
+
+        document.getElementById('p_vol').innerText = vol.toFixed(4) + " m³";
+        document.getElementById('p_masa').innerText = masa.toFixed(2) + " kg";
+        document.getElementById('p_pol').innerText = mPol.toFixed(2) + " kg";
+        document.getElementById('p_iso').innerText = mIso.toFixed(2) + " kg";
+    }
+
     function calcFurgon() {
         let l = parseFloat(document.getElementById('f_largo').value) || 0;
         let h = parseFloat(document.getElementById('f_alto').value) || 0;
@@ -365,7 +461,6 @@
         let esp = parseFloat(document.getElementById('f_espesor').value) || 0;
         let dens = parseFloat(document.getElementById('f_dens').value) || 0;
         
-        // 4 paredes + techo/piso + puertas
         let vol = (2*(l*h*esp) + 2*(l*a*esp) + (a*h*esp) + (a*h*esp));
         let masa = vol * dens;
         let p = parseFloat(document.getElementById('partPoliol').value) || 100;
@@ -406,6 +501,7 @@
     window.onload = function() {
         calculateBatch();
         calcCalibracion();
+        calcPanel();
         calcFurgon();
         calcTuberia();
     };
