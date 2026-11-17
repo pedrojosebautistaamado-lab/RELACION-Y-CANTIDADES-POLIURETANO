@@ -98,24 +98,28 @@
 
     <!-- 2. CLIENTES DE LA BASE CORPORATIVA -->
     <div class="card">
-        <h3>2. Selección y Autocompletado de Cliente (Base Santander / 1100+ Clientes)</h3>
+        <h3>2. Selección y Autocompletado de Cliente (Base Santander Completa)</h3>
         <div class="form-grid">
             <div class="input-group" style="grid-column: span 2;">
-                <label>Buscar / Seleccionar Cliente del Sistema</label>
+                <label>Buscar / Seleccionar Cliente del Sistema (Más de 90 Registros)</label>
                 <select id="selectCliente" onchange="seleccionarClienteSistema()">
                     <option value="">-- Seleccione un cliente de la base de datos --</option>
-                    <option value="fibroacero">FIBROACERO S.A. (Aislamiento Térmico)</option>
-                    <option value="montajes_elec">MONTAJES ELECTROMECANICOS</option>
-                    <option value="romero_pimienta">ROMERO PIMIENTA CINDY PAOLA</option>
-                    <option value="marin_grajales">MARIN GRAJALES FREDY</option>
-                    <option value="franco_rios">FRANCO RIOS CARLOS MARIO</option>
-                    <option value="moreno_ruiz">MORENO RUIZ HUGO DE JESUS</option>
-                    <option value="rojas_lopez">ROJAS LOPEZ ALEXANDER</option>
-                    <option value="parra_rativa">PARRA RATIVA AMILKAR</option>
-                    <option value="cardozo_bustamante">CARDOZO BUSTAMANTE ANYULT MILENA</option>
+                    <option value="florez_juan">FLOREZ GARCIA JUAN SEBASTIAN</option>
+                    <option value="pineres_camila">PIÑERES SOLANO CAMILA ANDREA</option>
+                    <option value="uribe_fernando">URIBE PEREZ FERNANDO</option>
+                    <option value="trespalacios_ivan">TRESPALACIOS MANOSALVA IVAN DARIO</option>
+                    <option value="angarita_jesus">ANGARITA DAZA JESUS DAVID</option>
+                    <option value="rodriguez_jesus">RODRIGUEZ PEREZ JESUS ALONSO</option>
+                    <option value="almeida_samuel">ALMEIDA MURILLO SAMUEL</option>
+                    <option value="figueroa_leonel">FIGUEROA HERNANDEZ LEONEL</option>
+                    <option value="posada_german">POSADA REYES GERMAN DARIO</option>
+                    <option value="rueda_jeidi">RUEDA NAVAS JEIDI NATALI</option>
+                    <option value="ochoa_julio">OCHOA SUAREZ JULIO CESAR</option>
+                    <option value="baron_yurley">BARON VILLAMIZAR YURLEY DAYANA</option>
+                    <option value="gomez_hector">GOMEZ ESTEBAN HECTOR JAVIER</option>
+                    <option value="garcia_edgar">GARCIA AFANADOR EDGAR ARLEY</option>
                     <option value="friocol">FRIOCOL S.A.</option>
                     <option value="partmo">FILTROS PARTMO S.A.S</option>
-                    <option value="almeida">ALMEIDA MURILLO SAMUEL</option>
                     <option value="chinchilla">CHINCHILLA SANDOVAL S.A.S</option>
                     <option value="dynatek">DYNATEK S.A.S</option>
                     <option value="macpollo">AVIDESA MAC POLLO S.A.</option>
@@ -252,173 +256,22 @@
     cargarTRMReal();
 
     const baseDatosClientes = {
-        'fibroacero': { nombre: "FIBROACERO S.A", nit: "890057127-0", pago: "Crédito 30 días", perfil: "ordinario", factura: "Zona Industrial Girón, Santander", entrega: "Zona Industrial Girón, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C - Aislamiento Térmico", usd: 5.95 },
-        'montajes_elec': { nombre: "MONTAJES ELECTROMECANICOS", nit: "900270989-1", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNFLS016", desc: "ESPOL FLS 016 - Refrigeración", usd: 6.18 },
-        'romero_pimienta': { nombre: "ROMERO PIMIENTA CINDY PAOLA", nit: "1002446556-9", pago: "Contado", perfil: "no_responsable", factura: "Floridablanca, Santander", entrega: "Floridablanca, Santander", ref: "MFORMNTRG313C", desc: "ESPOL TRG313C", usd: 5.94 },
-        'marin_grajales': { nombre: "MARIN GRAJALES FREDY", nit: "10030168-1", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTPL317", desc: "ESPOL TPL317", usd: 7.47 },
-        'franco_rios': { nombre: "FRANCO RIOS CARLOS MARIO", nit: "10034299-2", pago: "Contado", perfil: "no_responsable", factura: "Girón, Santander", entrega: "Girón, Santander", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 5.60 },
-        'moreno_ruiz': { nombre: "MORENO RUIZ HUGO DE JESUS", nit: "10119785-3", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.80 },
-        'rojas_lopez': { nombre: "ROJAS LOPEZ ALEXANDER", nit: "1013582543-4", pago: "Contado", perfil: "no_responsable", factura: "Piedecuesta, Santander", entrega: "Piedecuesta, Santander", ref: "MFORPOLN016", desc: "ABRIDOR DE CELDA / ESPUMAS", usd: 6.00 },
-        'parra_rativa': { nombre: "PARRA RATIVA AMILKAR", nit: "1013608976-5", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORACTI004", desc: "ACTIVADOR ESPUMOL", usd: 6.10 },
-        'cardozo_bustamante': { nombre: "CARDOZO BUSTAMANTE ANYULT MILENA", nit: "1013621189-6", pago: "Contado", perfil: "no_responsable", factura: "Girón, Santander", entrega: "Girón, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.90 },
+        'florez_juan': { nombre: "FLOREZ GARCIA JUAN SEBASTIAN", nit: "1005151681", pago: "Contado", perfil: "no_responsable", factura: "KLM 3,5 Anillo Vial, Girón", entrega: "KLM 3,5 Anillo Vial, Girón", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.95 },
+        'pineres_camila': { nombre: "PIÑERES SOLANO CAMILA ANDREA", nit: "1005335946", pago: "Crédito 30 días", perfil: "ordinario", factura: "CR 16 4 57, Bucaramanga", entrega: "CR 16 4 57, Bucaramanga", ref: "MFORMNFLS016", desc: "ESPOL FLS 016", usd: 6.18 },
+        'uribe_fernando': { nombre: "URIBE PEREZ FERNANDO", nit: "1062906789", pago: "Contado", perfil: "no_responsable", factura: "Carrera 11 No 30-31, Bucaramanga", entrega: "Carrera 11 No 30-31, Bucaramanga", ref: "MFORMNTPL317", desc: "ESPOL TPL317", usd: 7.47 },
+        'trespalacios_ivan': { nombre: "TRESPALACIOS MANOSALVA IVAN DARIO", nit: "1090434335", pago: "Crédito 30 días", perfil: "no_responsable", factura: "CL 17 A N 13 C -20, Cúcuta", entrega: "CL 17 A N 13 C -20, Cúcuta", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 5.60 },
+        'angarita_jesus': { nombre: "ANGARITA DAZA JESUS DAVID", nit: "1092352051", pago: "Contado", perfil: "no_responsable", factura: "CL 4 8 84 Brr Callejon, Cúcuta", entrega: "CL 4 8 84 Brr Callejon, Cúcuta", ref: "MFORPOLN016", desc: "ABRIDOR DE CELDA", usd: 6.00 },
+        'rodriguez_jesus': { nombre: "RODRIGUEZ PEREZ JESUS ALONSO", nit: "1094160933", pago: "Crédito 30 días", perfil: "no_responsable", factura: "AV 5 0 N 38 Brr Merced, Cúcuta", entrega: "AV 5 0 N 38 Brr Merced, Cúcuta", ref: "MFORACTI004", desc: "ACTIVADOR ESPUMOL", usd: 6.10 },
+        'almeida_samuel': { nombre: "ALMEIDA MURILLO SAMUEL", nit: "1095914079", pago: "Contado", perfil: "no_responsable", factura: "CRR 29B 46 51 Bellavista, Girón", entrega: "CRR 29B 46 51 Bellavista, Girón", ref: "MFORMNTRG313C", desc: "ESPOL TRG313C", usd: 5.94 },
+        'figueroa_leonel': { nombre: "FIGUEROA HERNANDEZ LEONEL", nit: "1095927781", pago: "Crédito 30 días", perfil: "ordinario", factura: "KM4 5 FCA Mazatlan, Girón", entrega: "KM4 5 FCA Mazatlan, Girón", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.95 },
+        'posada_german': { nombre: "POSADA REYES GERMAN DARIO", nit: "1098409319", pago: "Contado", perfil: "no_responsable", factura: "CR 24 52 50 AP 301, Bucaramanga", entrega: "CR 24 52 50 AP 301, Bucaramanga", ref: "MFORMNFLS016", desc: "ESPOL FLS 016", usd: 6.18 },
+        'rueda_jeidi': { nombre: "RUEDA NAVAS JEIDI NATALI", nit: "1098604337", pago: "Contado", perfil: "no_responsable", factura: "CL 56 17 53 Brr Ricaurte, Bucaramanga", entrega: "CL 56 17 53 Brr Ricaurte, Bucaramanga", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 5.60 },
+        'ochoa_julio': { nombre: "OCHOA SUAREZ JULIO CESAR", nit: "1098658370", pago: "Contado", perfil: "no_responsable", factura: "CR 31 194 21 Villa Jardin, Floridablanca", entrega: "CR 31 194 21 Villa Jardin, Floridablanca", ref: "MFORMNTPL317", desc: "ESPOL TPL317", usd: 7.47 },
+        'baron_yurley': { nombre: "BARON VILLAMIZAR YURLEY DAYANA", nit: "1099734275", pago: "Contado", perfil: "no_responsable", factura: "CRA 10 # 13-36 Gaitan, Bucaramanga", entrega: "CRA 10 # 13-36 Gaitan, Bucaramanga", ref: "MFORPOLN016", desc: "ABRIDOR DE CELDA", usd: 6.00 },
+        'gomez_hector': { nombre: "GOMEZ ESTEBAN HECTOR JAVIER", nit: "1102042442", pago: "Contado", perfil: "no_responsable", factura: "FCA La Libertad LT 09, Girón", entrega: "FCA La Libertad LT 09, Girón", ref: "MFORACTI004", desc: "ACTIVADOR ESPUMOL", usd: 6.10 },
+        'garcia_edgar': { nombre: "GARCIA AFANADOR EDGAR ARLEY", nit: "1102355225", pago: "Contado", perfil: "no_responsable", factura: "DG 14 # 11-38 Brisas del Campo, Girón", entrega: "DG 14 # 11-38 Brisas del Campo, Girón", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.95 },
         'friocol': { nombre: "FRIOCOL S.A.", nit: "890201172-0", pago: "Crédito 30 días", perfil: "ordinario", factura: "Cra 16 No 23-35, Bucaramanga", entrega: "Cra 16 No 23-35, Bucaramanga", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.95 },
         'partmo': { nombre: "FILTROS PARTMO S.A.S", nit: "900994125-1", pago: "Crédito 30 días", perfil: "gran_contribuyente", factura: "Calle 1 No. 3-15 Km 7 vía Palenque, Bucaramanga", entrega: "Calle 1 No. 3-15 Km 7 vía Palenque, Bucaramanga", ref: "MFORMNFLS016", desc: "ESPOL FLS 016", usd: 6.18 },
-        'almeida': { nombre: "ALMEIDA MURILLO SAMUEL", nit: "1095914079-9", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTRG313C", desc: "ESPOL TRG313C", usd: 5.94 },
         'chinchilla': { nombre: "CHINCHILLA SANDOVAL S.A.S", nit: "808001617-4", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTPL317", desc: "ESPOL TPL317", usd: 7.47 },
         'dynatek': { nombre: "DYNATEK S.A.S", nit: "900426750-2", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.60 },
-        'macpollo': { nombre: "AVIDESA MAC POLLO S.A.", nit: "890201881-3", pago: "Crédito 30 días", perfil: "gran_contribuyente", factura: "Piedecuesta / Bucaramanga", entrega: "Planta Principal Santander", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 5.60 },
-        'refriogar': { nombre: "REFRIOGAR S.A.S", nit: "901461366-5", pago: "Contado", perfil: "ordinario", factura: "Girón, Santander", entrega: "Girón, Santander", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 4.62 },
-        'furgoriente': { nombre: "FURGORIENTE S.A.S", nit: "900123456-8", pago: "Crédito 30 días", perfil: "ordinario", factura: "Zona Industrial Girón, Santander", entrega: "Zona Industrial Girón, Santander", ref: "MFORMNTRG312C", desc: "ESPOL TRG312C - Rigidas", usd: 5.80 },
-        'motorfilter': { nombre: "MOTOR FILTER S.A.S", nit: "800987654-1", pago: "Crédito 30 días", perfil: "gran_contribuyente", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNFLS020", desc: "ESPOL FILTRO PU FLS020", usd: 6.10 },
-        'medicalduarte': { nombre: "MEDICAL DUARTE ZF S.A.S", nit: "900888777-3", pago: "Crédito 30 días", perfil: "zona_franca", factura: "Zona Franca Santander, Floridablanca", entrega: "Zona Franca Santander, Floridablanca", ref: "MFORMZF01", desc: "ESPOL MED ZONA FRANCA", usd: 6.40 },
-        'ingequimicas': { nombre: "INGEQUIMICAS S.A.S", nit: "890333222-9", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORING01", desc: "SISTEMA POLIURETANO INGEQUIMICAS", usd: 5.90 }
-    };
-
-    function seleccionarClienteSistema() {
-        let key = document.getElementById('selectCliente').value;
-        if(!key || !baseDatosClientes[key]) return;
-        let c = baseDatosClientes[key];
-
-        document.getElementById('cliNombre').value = c.nombre;
-        document.getElementById('cliNit').value = c.nit;
-        document.getElementById('cliCondicionPago').value = c.pago;
-        document.getElementById('cliPerfilFiscal').value = c.perfil;
-        document.getElementById('dirFactura').value = c.factura;
-        document.getElementById('dirEntrega').value = c.entrega;
-
-        let tbody = document.getElementById('cuerpoTabla');
-        if(tbody.rows.length > 0) {
-            let row = tbody.rows[0];
-            row.querySelector('select').value = c.ref;
-            row.querySelectorAll('input')[0].value = c.desc;
-            row.querySelectorAll('input')[2].value = c.usd;
-        }
-        calcularTotales();
-    }
-
-    function actualizarReferenciaFila(selectElem) {
-        let codigo = selectElem.value;
-        let row = selectElem.closest('tr');
-        let descInput = row.querySelectorAll('input')[0];
-        let usdInput = row.querySelectorAll('input')[2];
-
-        if(codigo === 'MFORMNTRG311C') { descInput.value = "ESPOL TRG311C (Rigido Aislamiento)"; usdInput.value = 5.95; }
-        else if(codigo === 'MFORMNFLS016') { descInput.value = "ESPOL FLS 016 (Flexible Filtros)"; usdInput.value = 6.18; }
-        else if(codigo === 'MFORINTRG1923') { descInput.value = "PRONATE TRG 192-3"; usdInput.value = 5.60; }
-        else if(codigo === 'MFORMNTPL317') { descInput.value = "ESPOL TPL317"; usdInput.value = 7.47; }
-        else if(codigo === 'MFORPOLN016') { descInput.value = "ABRIDOR DE CELDA"; usdInput.value = 6.00; }
-        else if(codigo === 'MFORACTI004') { descInput.value = "ACTIVADOR ESPUMOL"; usdInput.value = 6.10; }
-        calcularTotales();
-    }
-
-    function agregarFila() {
-        let tbody = document.getElementById('cuerpoTabla');
-        let fila = document.createElement('tr');
-        fila.innerHTML = `
-            <td>
-                <select style="width:140px" onchange="actualizarReferenciaFila(this)">
-                    <option value="MFORMNTRG311C">MFORMNTRG311C</option>
-                    <option value="MFORMNFLS016">MFORMNFLS016</option>
-                    <option value="MFORINTRG1923">MFORINTRG1923</option>
-                    <option value="MFORMNTPL317">MFORMNTPL317</option>
-                    <option value="MFORPOLN016">MFORPOLN016</option>
-                    <option value="MFORACTI004">MFORACTI004</option>
-                </select>
-            </td>
-            <td><input type="text" value="PRONATE TRG 192-3" style="width:220px"></td>
-            <td><input type="number" value="250" style="width:80px" oninput="calcularTotales()"></td>
-            <td><input type="number" value="5.93" step="0.01" style="width:90px" oninput="calcularTotales()"></td>
-            <td class="col-cop">0</td>
-            <td class="col-total">0</td>
-            <td><button class="btn-danger" onclick="eliminarFila(this)">X</button></td>
-        `;
-        tbody.appendChild(fila);
-        calcularTotales();
-    }
-
-    function eliminarFila(btn) {
-        btn.closest('tr').remove();
-        calcularTotales();
-    }
-
-    function calcularTotales() {
-        let trm = parseFloat(document.getElementById('trmDia').value) || 0;
-        let perfil = document.getElementById('cliPerfilFiscal').value;
-        let filas = document.querySelectorAll('#cuerpoTabla tr');
-        let subtotal = 0;
-
-        filas.forEach(fila => {
-            let cant = parseFloat(fila.querySelectorAll('input')[1].value) || 0;
-            let precioUsd = parseFloat(fila.querySelectorAll('input')[2].value) || 0;
-            let precioCop = precioUsd * trm;
-            let totalItem = cant * precioCop;
-
-            fila.querySelector('.col-cop').innerText = "$ " + precioCop.toLocaleString('es-CO', {maximumFractionDigits: 2});
-            fila.querySelector('.col-total').innerText = "$ " + totalItem.toLocaleString('es-CO', {maximumFractionDigits: 2});
-            subtotal += totalItem;
-        });
-
-        let iva = (perfil === 'zona_franca' || perfil === 'no_responsable') ? 0 : subtotal * 0.19;
-        let retefuente = subtotal * 0.025; // Tarifa 2.5%
-        let reteica = subtotal * 0.004;     // Tarifa 4 x Mil (0.4%)
-        let granTotal = subtotal + iva - retefuente - reteica;
-
-        document.getElementById('sumSubtotal').innerText = "$ " + subtotal.toLocaleString('es-CO', {maximumFractionDigits: 2});
-        document.getElementById('sumIva').innerText = "$ " + iva.toLocaleString('es-CO', {maximumFractionDigits: 2});
-        document.getElementById('sumRetefuente').innerText = "$ " + retefuente.toLocaleString('es-CO', {maximumFractionDigits: 2}) + " (2.5%)";
-        document.getElementById('sumReteica').innerText = "$ " + reteica.toLocaleString('es-CO', {maximumFractionDigits: 2}) + " (4 x Mil)";
-        document.getElementById('sumGranTotal').innerText = "$ " + granTotal.toLocaleString('es-CO', {maximumFractionDigits: 2});
-    }
-
-    function exportarExcel() {
-        let wb = XLSX.utils.book_new();
-        let trm = parseFloat(document.getElementById('trmDia').value) || 0;
-
-        let datos = [
-            ["ALVAHER & ESPUMLÁTEX S.A. - ORDEN DE PEDIDO Y COTIZACIÓN ZONA SANTANDER"],
-            ["No. Pedido:", document.getElementById('numPedido').value, "", "Fecha:", document.getElementById('fechaPedido').value, ""],
-            ["TRM Oficial:", trm, "", "Centro Despacho:", document.getElementById('centroDespacho').value, ""],
-            [],
-            ["DATOS DEL CLIENTE Y FISCALES"],
-            ["Razón Social:", document.getElementById('cliNombre').value, "", "NIT:", document.getElementById('cliNit').value, ""],
-            ["Condición Pago:", document.getElementById('cliCondicionPago').value, "", "Perfil Fiscal:", document.getElementById('cliPerfilFiscal').value, ""],
-            ["Dir. Facturación:", document.getElementById('dirFactura').value, "", "Dir. Despacho:", document.getElementById('dirEntrega').value, ""],
-            [],
-            ["CÓDIGO", "DESCRIPCIÓN DE REFERENCIA", "CANTIDAD (KG)", "PRECIO UNIT. (USD)", "PRECIO UNIT. (COP)", "VALOR TOTAL (COP)"]
-        ];
-
-        let filas = document.querySelectorAll('#cuerpoTabla tr');
-        filas.forEach(fila => {
-            let cod = fila.querySelector('select').value;
-            let desc = fila.querySelectorAll('input')[0].value;
-            let cant = parseFloat(fila.querySelectorAll('input')[1].value) || 0;
-            let usd = parseFloat(fila.querySelectorAll('input')[2].value) || 0;
-            let cop = usd * trm;
-            let total = cant * cop;
-            datos.push([cod, desc, cant, usd, cop, total]);
-        });
-
-        datos.push([]);
-        datos.push(["RESUMEN FINANCIERO Y TRIBUTARIO", "", "", "", "", ""]);
-        datos.push(["Subtotal Neto", "", "", "", "", document.getElementById('sumSubtotal').innerText]);
-        datos.push(["IVA (Según Régimen)", "", "", "", "", document.getElementById('sumIva').innerText]);
-        datos.push(["ReteFuente (Tarifa 2.5%)", "", "", "", "", document.getElementById('sumRetefuente').innerText]);
-        datos.push(["ReteICA Municipal (Tarifa 4 x Mil / 0.4%)", "", "", "", "", document.getElementById('sumReteica').innerText]);
-        datos.push(["GRAN TOTAL A PAGAR (COP)", "", "", "", "", document.getElementById('sumGranTotal').innerText]);
-
-        let ws = XLSX.utils.aoa_to_sheet(datos);
-
-        ws['!cols'] = [
-            {wch: 18}, {wch: 35}, {wch: 16}, {wch: 16}, {wch: 18}, {wch: 22}
-        ];
-
-        XLSX.utils.book_append_sheet(wb, ws, "Orden de Pedido Santander");
-        XLSX.writeFile(wb, `Orden_Pedido_${document.getElementById('numPedido').value}_${document.getElementById('cliNombre').value}.xlsx`);
-    }
-
-    window.onload = function() {
-        calcularTotales();
-    };
-</script>
-</body>
-</html>
+        'macpollo': { nombre: "AVIDESA MAC POLLO S.A.", nit: "890201881-3", pago: "Crédito 30 días
