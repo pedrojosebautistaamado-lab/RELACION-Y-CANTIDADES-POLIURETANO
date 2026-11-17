@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador y Órdenes de Pedido | Alvaher & Espumlátex S.A. (Santander)</title>
+    <link rel="icon" type="image/png" href="logo-icono.png">
+    
+    <!-- SheetJS para exportar a Excel corporativo -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --radius: 12px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 15px; line-height: 1.4; }
+        .container { max-width: 1150px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 20px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 22px; border-radius: var(--radius); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { font-size: 1.4rem; margin-bottom: 5px; }
+        header p { font-size: 0.85rem; opacity: 0.95; }
+
+        .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 15px; }
+        .card h3 { font-size: 1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        .input-group { display: flex; flex-direction: column; gap: 4px; }
+        label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+        input, select, textarea { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; background: #fff; color: var(--text-main); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+        th { background: #f1f5f9; color: var(--primary); font-weight: 600; }
+        
+        .btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 0.9rem; }
+        .btn:hover { background: #1e40af; }
+        .btn-success { background: #166534; }
+        .btn-success:hover { background: #14532d; }
+        .btn-danger { background: #991b1b; cursor: pointer; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; color: white; border: none;}
+
+        .summary-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
+        .summary-row span:last-child { font-weight: 700; color: #14532d; }
+        .trm-status { font-size: 0.75rem; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div style="background: white; display: inline-block; padding: 5px 18px; border-radius: 50px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+            <svg width="140" height="26" viewBox="0 0 200 35" xmlns="http://www.w3.org/2000/svg">
+                <text x="0" y="27" font-family="'Segoe UI', Arial, sans-serif" font-size="26" font-weight="700" fill="#1e3a8a" letter-spacing="-0.5">Espumlátex<tspan font-size="13" dy="-12">®</tspan></text>
+            </svg>
+        </div>
+        <h1>Cotizador y Órdenes de Pedido - Zona Santander</h1>
+        <p>Alvaher & Espumlátex S.A. | Módulo Comercial Integral (Base Corporativa Santander)</p>
+    </header>
+
+    <!-- 1. DATOS GENERALES Y TRM -->
+    <div class="card">
+        <h3>1. Datos Generales y TRM Oficial</h3>
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Número de Pedido / Cotización</label>
+                <input type="text" id="numPedido" value="16950">
+            </div>
+            <div class="input-group">
+                <label>Fecha de Emisión</label>
+                <input type="date" id="fechaPedido">
+            </div>
+            <div class="input-group">
+                <label>TRM Oficial (Banco de la República / API)</label>
+                <input type="number" id="trmDia" value="4150.99" step="0.01" oninput="calcularTotales()">
+                <span id="trmLabelStatus" class="trm-status">Cargando TRM oficial...</span>
+            </div>
+            <div class="input-group">
+                <label>Centro de Despacho (Origen)</label>
+                <select id="centroDespacho">
+                    <option value="Bogotá">Bogotá (Planta Principal)</option>
+                    <option value="Girón" selected>Girón (Bodega Santander)</option>
+                    <option value="Barranquilla">Barranquilla</option>
+                    <option value="Medellín">Medellín</option>
+                    <option value="Cali">Cali</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. CLIENTES DE LA BASE CORPORATIVA -->
+    <div class="card">
+        <h3>2. Selección y Autocompletado de Cliente (Base Santander / 1100+ Clientes)</h3>
+        <div class="form-grid">
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Buscar / Seleccionar Cliente del Sistema</label>
+                <select id="selectCliente" onchange="seleccionarClienteSistema()">
+                    <option value="">-- Seleccione un cliente de la base de datos --</option>
+                    <option value="fibroacero">FIBROACERO S.A. (Aislamiento Térmico)</option>
+                    <option value="montajes_elec">MONTAJES ELECTROMECANICOS</option>
+                    <option value="romero_pimienta">ROMERO PIMIENTA CINDY PAOLA</option>
+                    <option value="marin_grajales">MARIN GRAJALES FREDY</option>
+                    <option value="franco_rios">FRANCO RIOS CARLOS MARIO</option>
+                    <option value="moreno_ruiz">MORENO RUIZ HUGO DE JESUS</option>
+                    <option value="rojas_lopez">ROJAS LOPEZ ALEXANDER</option>
+                    <option value="parra_rativa">PARRA RATIVA AMILKAR</option>
+                    <option value="cardozo_bustamante">CARDOZO BUSTAMANTE ANYULT MILENA</option>
+                    <option value="friocol">FRIOCOL S.A.</option>
+                    <option value="partmo">FILTROS PARTMO S.A.S</option>
+                    <option value="almeida">ALMEIDA MURILLO SAMUEL</option>
+                    <option value="chinchilla">CHINCHILLA SANDOVAL S.A.S</option>
+                    <option value="dynatek">DYNATEK S.A.S</option>
+                    <option value="macpollo">AVIDESA MAC POLLO S.A.</option>
+                    <option value="refriogar">REFRIOGAR S.A.S</option>
+                    <option value="furgoriente">FURGORIENTE S.A.S</option>
+                    <option value="motorfilter">MOTOR FILTER S.A.S</option>
+                    <option value="medicalduarte">MEDICAL DUARTE ZF S.A.S</option>
+                    <option value="ingequimicas">INGEQUIMICAS S.A.S</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Razón Social / Cliente</label>
+                <input type="text" id="cliNombre">
+            </div>
+            <div class="input-group">
+                <label>NIT / Cédula</label>
+                <input type="text" id="cliNit">
+            </div>
+        </div>
+        <div class="form-grid" style="margin-top: 10px;">
+            <div class="input-group">
+                <label>Condición de Pago / Plazo</label>
+                <input type="text" id="cliCondicionPago" value="Crédito 30 días">
+            </div>
+            <div class="input-group">
+                <label>Perfil Fiscal / Impuesto</label>
+                <select id="cliPerfilFiscal" onchange="calcularTotales()">
+                    <option value="ordinario">Régimen Ordinario / Común (IVA 19%)</option>
+                    <option value="gran_contribuyente">Gran Contribuyente (IVA 19%)</option>
+                    <option value="zona_franca">Zona Franca (Exento IVA 0%)</option>
+                    <option value="no_responsable">No Responsable de IVA (0%)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Dirección de Facturación</label>
+                <input type="text" id="dirFactura" value="Bucaramanga / Área Metropolitana, Santander">
+            </div>
+            <div class="input-group">
+                <label>Dirección de Despacho (Entrega)</label>
+                <input type="text" id="dirEntrega" value="Bodega / Planta Cliente Santander">
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. DETALLE DE REFERENCIAS Y PRECIOS -->
+    <div class="card">
+        <h3>
+            <span>3. Detalle de Referencias y Precios</span>
+            <button class="btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="agregarFila()">+ Agregar Referencia</button>
+        </h3>
+        <table id="tablaItems">
+            <thead>
+                <tr>
+                    <th>Código de Parte</th>
+                    <th>Descripción de la Referencia</th>
+                    <th>Cantidad (Kilos)</th>
+                    <th>Precio Unit. (USD)</th>
+                    <th>Precio Unit. (COP)</th>
+                    <th>Valor Total (COP)</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+                <tr>
+                    <td>
+                        <select style="width:140px" onchange="actualizarReferenciaFila(this)">
+                            <option value="MFORMNTRG311C">MFORMNTRG311C</option>
+                            <option value="MFORMNFLS016">MFORMNFLS016</option>
+                            <option value="MFORINTRG1923">MFORINTRG1923</option>
+                            <option value="MFORMNTPL317">MFORMNTPL317</option>
+                            <option value="MFORPOLN016">MFORPOLN016</option>
+                            <option value="MFORACTI004">MFORACTI004</option>
+                        </select>
+                    </td>
+                    <td><input type="text" value="ESPOL TRG311C (Rigido Aislamiento)" style="width:220px"></td>
+                    <td><input type="number" value="230" style="width:80px" oninput="calcularTotales()"></td>
+                    <td><input type="number" value="5.95" step="0.01" style="width:90px" oninput="calcularTotales()"></td>
+                    <td class="col-cop">0</td>
+                    <td class="col-total">0</td>
+                    <td><button class="btn-danger" onclick="eliminarFila(this)">X</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 4. RESUMEN FINANCIERO Y RETENCIONES -->
+    <div class="card">
+        <h3>4. Resumen Financiero, Impuestos y Retenciones Aplicadas</h3>
+        <div class="summary-box">
+            <div class="summary-row">
+                <span>Subtotal Neto:</span>
+                <span id="sumSubtotal">$ 0</span>
+            </div>
+            <div class="summary-row">
+                <span>IVA (19% según régimen fiscal):</span>
+                <span id="sumIva">$ 0</span>
+            </div>
+            <div class="summary-row">
+                <span>ReteFuente Aplicada (Tarifa: 2.5% sobre subtotal):</span>
+                <span id="sumRetefuente">$ 0</span>
+            </div>
+            <div class="summary-row">
+                <span>ReteICA Municipal Bucaramanga (Tarifa: 4 x Mil / 0.4%):</span>
+                <span id="sumReteica">$ 0</span>
+            </div>
+            <div class="summary-row" style="border-top: 2px solid #166534; padding-top: 8px; margin-top: 8px; font-size: 1.1rem;">
+                <span>GRAN TOTAL A PAGAR (COP):</span>
+                <span id="sumGranTotal">$ 0</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <button class="btn btn-success" onclick="exportarExcel()">📥 Descargar Cotización y Orden en Excel Corporativo (.xlsx)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('fechaPedido').valueAsDate = new Date();
+
+    async function cargarTRMReal() {
+        try {
+            let response = await fetch('https://trm-colombia.herokuapp.com/latest');
+            let data = await response.json();
+            if(data && data.value) {
+                document.getElementById('trmDia').value = data.value;
+                document.getElementById('trmLabelStatus').innerText = "✔ TRM Actualizada Oficial (" + data.date + ")";
+                calcularTotales();
+            }
+        } catch (e) {
+            document.getElementById('trmLabelStatus').innerText = "⚠ Usando TRM estándar de respaldo (Editable)";
+        }
+    }
+    cargarTRMReal();
+
+    const baseDatosClientes = {
+        'fibroacero': { nombre: "FIBROACERO S.A", nit: "890057127-0", pago: "Crédito 30 días", perfil: "ordinario", factura: "Zona Industrial Girón, Santander", entrega: "Zona Industrial Girón, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C - Aislamiento Térmico", usd: 5.95 },
+        'montajes_elec': { nombre: "MONTAJES ELECTROMECANICOS", nit: "900270989-1", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNFLS016", desc: "ESPOL FLS 016 - Refrigeración", usd: 6.18 },
+        'romero_pimienta': { nombre: "ROMERO PIMIENTA CINDY PAOLA", nit: "1002446556-9", pago: "Contado", perfil: "no_responsable", factura: "Floridablanca, Santander", entrega: "Floridablanca, Santander", ref: "MFORMNTRG313C", desc: "ESPOL TRG313C", usd: 5.94 },
+        'marin_grajales': { nombre: "MARIN GRAJALES FREDY", nit: "10030168-1", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTPL317", desc: "ESPOL TPL317", usd: 7.47 },
+        'franco_rios': { nombre: "FRANCO RIOS CARLOS MARIO", nit: "10034299-2", pago: "Contado", perfil: "no_responsable", factura: "Girón, Santander", entrega: "Girón, Santander", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 5.60 },
+        'moreno_ruiz': { nombre: "MORENO RUIZ HUGO DE JESUS", nit: "10119785-3", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.80 },
+        'rojas_lopez': { nombre: "ROJAS LOPEZ ALEXANDER", nit: "1013582543-4", pago: "Contado", perfil: "no_responsable", factura: "Piedecuesta, Santander", entrega: "Piedecuesta, Santander", ref: "MFORPOLN016", desc: "ABRIDOR DE CELDA / ESPUMAS", usd: 6.00 },
+        'parra_rativa': { nombre: "PARRA RATIVA AMILKAR", nit: "1013608976-5", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORACTI004", desc: "ACTIVADOR ESPUMOL", usd: 6.10 },
+        'cardozo_bustamante': { nombre: "CARDOZO BUSTAMANTE ANYULT MILENA", nit: "1013621189-6", pago: "Contado", perfil: "no_responsable", factura: "Girón, Santander", entrega: "Girón, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.90 },
+        'friocol': { nombre: "FRIOCOL S.A.", nit: "890201172-0", pago: "Crédito 30 días", perfil: "ordinario", factura: "Cra 16 No 23-35, Bucaramanga", entrega: "Cra 16 No 23-35, Bucaramanga", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.95 },
+        'partmo': { nombre: "FILTROS PARTMO S.A.S", nit: "900994125-1", pago: "Crédito 30 días", perfil: "gran_contribuyente", factura: "Calle 1 No. 3-15 Km 7 vía Palenque, Bucaramanga", entrega: "Calle 1 No. 3-15 Km 7 vía Palenque, Bucaramanga", ref: "MFORMNFLS016", desc: "ESPOL FLS 016", usd: 6.18 },
+        'almeida': { nombre: "ALMEIDA MURILLO SAMUEL", nit: "1095914079-9", pago: "Contado", perfil: "no_responsable", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTRG313C", desc: "ESPOL TRG313C", usd: 5.94 },
+        'chinchilla': { nombre: "CHINCHILLA SANDOVAL S.A.S", nit: "808001617-4", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTPL317", desc: "ESPOL TPL317", usd: 7.47 },
+        'dynatek': { nombre: "DYNATEK S.A.S", nit: "900426750-2", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNTRG311C", desc: "ESPOL TRG311C", usd: 5.60 },
+        'macpollo': { nombre: "AVIDESA MAC POLLO S.A.", nit: "890201881-3", pago: "Crédito 30 días", perfil: "gran_contribuyente", factura: "Piedecuesta / Bucaramanga", entrega: "Planta Principal Santander", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 5.60 },
+        'refriogar': { nombre: "REFRIOGAR S.A.S", nit: "901461366-5", pago: "Contado", perfil: "ordinario", factura: "Girón, Santander", entrega: "Girón, Santander", ref: "MFORINTRG1923", desc: "PRONATE TRG 192-3", usd: 4.62 },
+        'furgoriente': { nombre: "FURGORIENTE S.A.S", nit: "900123456-8", pago: "Crédito 30 días", perfil: "ordinario", factura: "Zona Industrial Girón, Santander", entrega: "Zona Industrial Girón, Santander", ref: "MFORMNTRG312C", desc: "ESPOL TRG312C - Rigidas", usd: 5.80 },
+        'motorfilter': { nombre: "MOTOR FILTER S.A.S", nit: "800987654-1", pago: "Crédito 30 días", perfil: "gran_contribuyente", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORMNFLS020", desc: "ESPOL FILTRO PU FLS020", usd: 6.10 },
+        'medicalduarte': { nombre: "MEDICAL DUARTE ZF S.A.S", nit: "900888777-3", pago: "Crédito 30 días", perfil: "zona_franca", factura: "Zona Franca Santander, Floridablanca", entrega: "Zona Franca Santander, Floridablanca", ref: "MFORMZF01", desc: "ESPOL MED ZONA FRANCA", usd: 6.40 },
+        'ingequimicas': { nombre: "INGEQUIMICAS S.A.S", nit: "890333222-9", pago: "Crédito 30 días", perfil: "ordinario", factura: "Bucaramanga, Santander", entrega: "Bucaramanga, Santander", ref: "MFORING01", desc: "SISTEMA POLIURETANO INGEQUIMICAS", usd: 5.90 }
+    };
+
+    function seleccionarClienteSistema() {
+        let key = document.getElementById('selectCliente').value;
+        if(!key || !baseDatosClientes[key]) return;
+        let c = baseDatosClientes[key];
+
+        document.getElementById('cliNombre').value = c.nombre;
+        document.getElementById('cliNit').value = c.nit;
+        document.getElementById('cliCondicionPago').value = c.pago;
+        document.getElementById('cliPerfilFiscal').value = c.perfil;
+        document.getElementById('dirFactura').value = c.factura;
+        document.getElementById('dirEntrega').value = c.entrega;
+
+        let tbody = document.getElementById('cuerpoTabla');
+        if(tbody.rows.length > 0) {
+            let row = tbody.rows[0];
+            row.querySelector('select').value = c.ref;
+            row.querySelectorAll('input')[0].value = c.desc;
+            row.querySelectorAll('input')[2].value = c.usd;
+        }
+        calcularTotales();
+    }
+
+    function actualizarReferenciaFila(selectElem) {
+        let codigo = selectElem.value;
+        let row = selectElem.closest('tr');
+        let descInput = row.querySelectorAll('input')[0];
+        let usdInput = row.querySelectorAll('input')[2];
+
+        if(codigo === 'MFORMNTRG311C') { descInput.value = "ESPOL TRG311C (Rigido Aislamiento)"; usdInput.value = 5.95; }
+        else if(codigo === 'MFORMNFLS016') { descInput.value = "ESPOL FLS 016 (Flexible Filtros)"; usdInput.value = 6.18; }
+        else if(codigo === 'MFORINTRG1923') { descInput.value = "PRONATE TRG 192-3"; usdInput.value = 5.60; }
+        else if(codigo === 'MFORMNTPL317') { descInput.value = "ESPOL TPL317"; usdInput.value = 7.47; }
+        else if(codigo === 'MFORPOLN016') { descInput.value = "ABRIDOR DE CELDA"; usdInput.value = 6.00; }
+        else if(codigo === 'MFORACTI004') { descInput.value = "ACTIVADOR ESPUMOL"; usdInput.value = 6.10; }
+        calcularTotales();
+    }
+
+    function agregarFila() {
+        let tbody = document.getElementById('cuerpoTabla');
+        let fila = document.createElement('tr');
+        fila.innerHTML = `
+            <td>
+                <select style="width:140px" onchange="actualizarReferenciaFila(this)">
+                    <option value="MFORMNTRG311C">MFORMNTRG311C</option>
+                    <option value="MFORMNFLS016">MFORMNFLS016</option>
+                    <option value="MFORINTRG1923">MFORINTRG1923</option>
+                    <option value="MFORMNTPL317">MFORMNTPL317</option>
+                    <option value="MFORPOLN016">MFORPOLN016</option>
+                    <option value="MFORACTI004">MFORACTI004</option>
+                </select>
+            </td>
+            <td><input type="text" value="PRONATE TRG 192-3" style="width:220px"></td>
+            <td><input type="number" value="250" style="width:80px" oninput="calcularTotales()"></td>
+            <td><input type="number" value="5.93" step="0.01" style="width:90px" oninput="calcularTotales()"></td>
+            <td class="col-cop">0</td>
+            <td class="col-total">0</td>
+            <td><button class="btn-danger" onclick="eliminarFila(this)">X</button></td>
+        `;
+        tbody.appendChild(fila);
+        calcularTotales();
+    }
+
+    function eliminarFila(btn) {
+        btn.closest('tr').remove();
+        calcularTotales();
+    }
+
+    function calcularTotales() {
+        let trm = parseFloat(document.getElementById('trmDia').value) || 0;
+        let perfil = document.getElementById('cliPerfilFiscal').value;
+        let filas = document.querySelectorAll('#cuerpoTabla tr');
+        let subtotal = 0;
+
+        filas.forEach(fila => {
+            let cant = parseFloat(fila.querySelectorAll('input')[1].value) || 0;
+            let precioUsd = parseFloat(fila.querySelectorAll('input')[2].value) || 0;
+            let precioCop = precioUsd * trm;
+            let totalItem = cant * precioCop;
+
+            fila.querySelector('.col-cop').innerText = "$ " + precioCop.toLocaleString('es-CO', {maximumFractionDigits: 2});
+            fila.querySelector('.col-total').innerText = "$ " + totalItem.toLocaleString('es-CO', {maximumFractionDigits: 2});
+            subtotal += totalItem;
+        });
+
+        let iva = (perfil === 'zona_franca' || perfil === 'no_responsable') ? 0 : subtotal * 0.19;
+        let retefuente = subtotal * 0.025; // Tarifa 2.5%
+        let reteica = subtotal * 0.004;     // Tarifa 4 x Mil (0.4%)
+        let granTotal = subtotal + iva - retefuente - reteica;
+
+        document.getElementById('sumSubtotal').innerText = "$ " + subtotal.toLocaleString('es-CO', {maximumFractionDigits: 2});
+        document.getElementById('sumIva').innerText = "$ " + iva.toLocaleString('es-CO', {maximumFractionDigits: 2});
+        document.getElementById('sumRetefuente').innerText = "$ " + retefuente.toLocaleString('es-CO', {maximumFractionDigits: 2}) + " (2.5%)";
+        document.getElementById('sumReteica').innerText = "$ " + reteica.toLocaleString('es-CO', {maximumFractionDigits: 2}) + " (4 x Mil)";
+        document.getElementById('sumGranTotal').innerText = "$ " + granTotal.toLocaleString('es-CO', {maximumFractionDigits: 2});
+    }
+
+    function exportarExcel() {
+        let wb = XLSX.utils.book_new();
+        let trm = parseFloat(document.getElementById('trmDia').value) || 0;
+
+        let datos = [
+            ["ALVAHER & ESPUMLÁTEX S.A. - ORDEN DE PEDIDO Y COTIZACIÓN ZONA SANTANDER"],
+            ["No. Pedido:", document.getElementById('numPedido').value, "", "Fecha:", document.getElementById('fechaPedido').value, ""],
+            ["TRM Oficial:", trm, "", "Centro Despacho:", document.getElementById('centroDespacho').value, ""],
+            [],
+            ["DATOS DEL CLIENTE Y FISCALES"],
+            ["Razón Social:", document.getElementById('cliNombre').value, "", "NIT:", document.getElementById('cliNit').value, ""],
+            ["Condición Pago:", document.getElementById('cliCondicionPago').value, "", "Perfil Fiscal:", document.getElementById('cliPerfilFiscal').value, ""],
+            ["Dir. Facturación:", document.getElementById('dirFactura').value, "", "Dir. Despacho:", document.getElementById('dirEntrega').value, ""],
+            [],
+            ["CÓDIGO", "DESCRIPCIÓN DE REFERENCIA", "CANTIDAD (KG)", "PRECIO UNIT. (USD)", "PRECIO UNIT. (COP)", "VALOR TOTAL (COP)"]
+        ];
+
+        let filas = document.querySelectorAll('#cuerpoTabla tr');
+        filas.forEach(fila => {
+            let cod = fila.querySelector('select').value;
+            let desc = fila.querySelectorAll('input')[0].value;
+            let cant = parseFloat(fila.querySelectorAll('input')[1].value) || 0;
+            let usd = parseFloat(fila.querySelectorAll('input')[2].value) || 0;
+            let cop = usd * trm;
+            let total = cant * cop;
+            datos.push([cod, desc, cant, usd, cop, total]);
+        });
+
+        datos.push([]);
+        datos.push(["RESUMEN FINANCIERO Y TRIBUTARIO", "", "", "", "", ""]);
+        datos.push(["Subtotal Neto", "", "", "", "", document.getElementById('sumSubtotal').innerText]);
+        datos.push(["IVA (Según Régimen)", "", "", "", "", document.getElementById('sumIva').innerText]);
+        datos.push(["ReteFuente (Tarifa 2.5%)", "", "", "", "", document.getElementById('sumRetefuente').innerText]);
+        datos.push(["ReteICA Municipal (Tarifa 4 x Mil / 0.4%)", "", "", "", "", document.getElementById('sumReteica').innerText]);
+        datos.push(["GRAN TOTAL A PAGAR (COP)", "", "", "", "", document.getElementById('sumGranTotal').innerText]);
+
+        let ws = XLSX.utils.aoa_to_sheet(datos);
+
+        ws['!cols'] = [
+            {wch: 18}, {wch: 35}, {wch: 16}, {wch: 16}, {wch: 18}, {wch: 22}
+        ];
+
+        XLSX.utils.book_append_sheet(wb, ws, "Orden de Pedido Santander");
+        XLSX.writeFile(wb, `Orden_Pedido_${document.getElementById('numPedido').value}_${document.getElementById('cliNombre').value}.xlsx`);
+    }
+
+    window.onload = function() {
+        calcularTotales();
+    };
+</script>
+</body>
+</html>
