@@ -177,8 +177,16 @@
                 <span id="resPoliol">--</span>
             </div>
             <div class="result-row">
+                <span>Tambores de Poliol (230 kg c/u):</span>
+                <span id="resTamboresPol">--</span>
+            </div>
+            <div class="result-row">
                 <span>Isocianato Requerido:</span>
                 <span id="resIso">--</span>
+            </div>
+            <div class="result-row">
+                <span>Tambores de Isocianato (250 kg c/u):</span>
+                <span id="resTamboresIso">--</span>
             </div>
             <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 4px; margin-top: 4px;">
                 <span>Total Mezcla:</span>
@@ -527,9 +535,20 @@
         if(suma <= 0) return;
         let mPol = (p / suma) * totalMasa;
         let mIso = (i / suma) * totalMasa;
+
         document.getElementById('resPoliol').innerText = mPol.toFixed(2) + " " + unidad;
         document.getElementById('resIso').innerText = mIso.toFixed(2) + " " + unidad;
         document.getElementById('resTotal').innerText = totalMasa.toFixed(2) + " " + unidad;
+
+        // Conversión a Kilogramos base para cálculo exacto de tambores
+        let mPolKg = unidad === 'lb' ? mPol * 0.453592 : (unidad === 'g' ? mPol / 1000 : mPol);
+        let mIsoKg = unidad === 'lb' ? mIso * 0.453592 : (unidad === 'g' ? mIso / 1000 : mIso);
+
+        let tamboresPol = mPolKg / 230;
+        let tamboresIso = mIsoKg / 250;
+
+        document.getElementById('resTamboresPol').innerText = tamboresPol.toFixed(2) + " tambores";
+        document.getElementById('resTamboresIso').innerText = tamboresIso.toFixed(2) + " tambores";
 
         calcPanel();
         calcFurgon();
