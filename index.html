@@ -45,11 +45,14 @@
         .calc-section { display: none; }
         .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
         
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; gap: 8px; flex-wrap: wrap; }
         .card h2 { font-size: 1.1rem; color: var(--primary); }
         
+        .header-actions { display: flex; gap: 8px; align-items: center; }
         .back-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: var(--text-main); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
         .back-btn:hover { background: #e2e8f0; }
+        .reset-btn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .reset-btn:hover { background: #fef3c7; }
 
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
         .input-group { display: flex; flex-direction: column; gap: 4px; }
@@ -64,10 +67,57 @@
         .tech-info-box { background: #f8fafc; border-left: 4px solid var(--primary-light); padding: 10px 14px; border-radius: 4px; margin-bottom: 15px; font-size: 0.82rem; color: #334155; line-height: 1.4; }
         .tech-info-box strong { color: var(--primary); }
 
+        /* INDICADOR CLARO DE MODO Y RELACIÓN ACTIVA */
+        .active-indicator-bar {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .active-mode-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .active-ratio-summary {
+            font-size: 0.78rem;
+            color: #334155;
+            font-weight: 600;
+        }
+
         .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px; margin-top: 12px; }
-        .result-box h3 { font-size: 0.9rem; color: #166534; margin-bottom: 6px; }
-        .result-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem; }
-        .result-row span:last-child { font-weight: 700; color: #14532d; }
+        .result-box h3 { font-size: 0.9rem; color: #166534; margin-bottom: 8px; }
+        .result-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 0.85rem; padding: 3px 6px; border-radius: 6px; }
+        .result-row span:last-child { font-weight: 700; color: #14532d; text-align: right; }
+        .row-base-highlight {
+            background: #fef9c3;
+            border: 1px solid #fde047;
+        }
+        .row-base-highlight span:last-child {
+            color: #854d0e;
+        }
+        .tag-role {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 999px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .tag-base {
+            background: #fef08a;
+            color: #854d0e;
+            border: 1px solid #facc15;
+        }
+        .tag-calc {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
     </style>
 </head>
 <body>
@@ -117,7 +167,10 @@
     <div id="sec_relaciones" class="calc-section card">
         <div class="card-header">
             <h2>1. Relación de Mezcla y Dosificación</h2>
-            <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+            <div class="header-actions">
+                <button class="reset-btn" onclick="reiniciarDosificacion()">↺ Reiniciar</button>
+                <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
+            </div>
         </div>
         <div class="presets">
             <span style="font-size:0.78rem; align-self:center; font-weight:600;">Presets:</span>
@@ -158,7 +211,7 @@
         </div>
         <div class="form-grid" style="margin-top: 10px;">
             <div class="input-group">
-                <label>Base de Cálculo de Dosificación</label>
+                <label>1. Tipo de Referencia Base</label>
                 <select id="modoDosificacion" onchange="actualizarModoDosificacion()">
                     <option value="total" selected>A partir del Total Requerido</option>
                     <option value="poliol">A partir de cantidad fija de Poliol</option>
@@ -166,11 +219,11 @@
                 </select>
             </div>
             <div class="input-group">
-                <label id="labelCantidadBase">Cantidad Total Lote Requerido</label>
+                <label id="labelCantidadBase">2. Cantidad Total Lote Requerido</label>
                 <input type="number" id="totalMasa" value="10" step="0.5" oninput="calculateBatch()">
             </div>
             <div class="input-group">
-                <label>Unidad de Medida</label>
+                <label>3. Unidad de Medida</label>
                 <select id="unidadMasa" onchange="calculateBatch()">
                     <option value="kg">Kilogramos (kg)</option>
                     <option value="lb">Libras (lb)</option>
@@ -178,26 +231,32 @@
                 </select>
             </div>
         </div>
+
+        <div class="active-indicator-bar">
+            <div id="indicadorModoActivo" class="active-mode-badge">Modo activo: Partiendo del TOTAL REQUERIDO</div>
+            <div id="indicadorRelacionActiva" class="active-ratio-summary">Relación activa: 100 Poliol : 120.0 Iso | Iso/Pol = 1.200 | Pol/Iso = 0.833</div>
+        </div>
+
         <div class="result-box">
             <h3>Resultado de Dosificación para el Lote:</h3>
-            <div class="result-row">
-                <span>Poliol Requerido:</span>
+            <div id="filaResPoliol" class="result-row">
+                <span>Poliol Requerido <span id="badgePoliol" class="tag-role tag-calc">CALCULADO</span>:</span>
                 <span id="resPoliol">--</span>
             </div>
             <div class="result-row">
                 <span>Tambores de Poliol (230 kg c/u):</span>
                 <span id="resTamboresPol">--</span>
             </div>
-            <div class="result-row">
-                <span>Isocianato Requerido:</span>
+            <div id="filaResIso" class="result-row">
+                <span>Isocianato Requerido <span id="badgeIso" class="tag-role tag-calc">CALCULADO</span>:</span>
                 <span id="resIso">--</span>
             </div>
             <div class="result-row">
                 <span>Tambores de Isocianato (250 kg c/u):</span>
                 <span id="resTamboresIso">--</span>
             </div>
-            <div class="result-row" style="border-top: 1px dashed #bbf7d0; padding-top: 4px; margin-top: 4px;">
-                <span>Total Mezcla:</span>
+            <div id="filaResTotal" class="result-row row-base-highlight" style="border-top: 1px dashed #bbf7d0; padding-top: 5px; margin-top: 5px;">
+                <span>Total Mezcla <span id="badgeTotal" class="tag-role tag-base">DATO BASE</span>:</span>
                 <span id="resTotal">--</span>
             </div>
         </div>
@@ -465,17 +524,74 @@
         calculateFromParts();
     }
 
+    function reiniciarDosificacion() {
+        document.getElementById('partPoliol').value = 100;
+        document.getElementById('partIso').value = 120;
+        document.getElementById('modoDosificacion').value = 'total';
+        document.getElementById('totalMasa').value = 10;
+        document.getElementById('unidadMasa').value = 'kg';
+        actualizarModoDosificacion();
+        calculateFromParts();
+    }
+
     function actualizarModoDosificacion() {
         let modo = document.getElementById('modoDosificacion').value;
         let label = document.getElementById('labelCantidadBase');
         if (modo === 'poliol') {
-            label.innerText = "Cantidad Disponible de Poliol";
+            label.innerText = "2. Cantidad Disponible de Poliol";
         } else if (modo === 'isocianato') {
-            label.innerText = "Cantidad Disponible de Isocianato";
+            label.innerText = "2. Cantidad Disponible de Isocianato";
         } else {
-            label.innerText = "Cantidad Total Lote Requerido";
+            label.innerText = "2. Cantidad Total Lote Requerido";
         }
         calculateBatch();
+    }
+
+    function actualizarIndicadoresVisuales(p, i, modo, cantBase, unidad) {
+        let suma = p + i;
+        let rIsoPol = p > 0 ? (i / p) : 0;
+        let rPolIso = i > 0 ? (p / i) : 0;
+        let pctP = suma > 0 ? ((p / suma) * 100).toFixed(1) : "0.0";
+        let pctI = suma > 0 ? ((i / suma) * 100).toFixed(1) : "0.0";
+
+        let textoModo = "";
+        if (modo === 'poliol') {
+            textoModo = `Modo activo: Partiendo de POLIOL fijo (${cantBase.toFixed(2)} ${unidad})`;
+        } else if (modo === 'isocianato') {
+            textoModo = `Modo activo: Partiendo de ISOCIANATO fijo (${cantBase.toFixed(2)} ${unidad})`;
+        } else {
+            textoModo = `Modo activo: Partiendo del TOTAL REQUERIDO (${cantBase.toFixed(2)} ${unidad})`;
+        }
+
+        document.getElementById('indicadorModoActivo').innerText = textoModo;
+        document.getElementById('indicadorRelacionActiva').innerText =
+            `Relación activa: ${p} Poliol : ${i.toFixed(2)} Iso | Iso/Pol = ${rIsoPol.toFixed(3)} | Pol/Iso = ${rPolIso.toFixed(3)} (${pctP}% / ${pctI}%)`;
+
+        let filaPol = document.getElementById('filaResPoliol');
+        let filaIso = document.getElementById('filaResIso');
+        let filaTot = document.getElementById('filaResTotal');
+        let badgePol = document.getElementById('badgePoliol');
+        let badgeIso = document.getElementById('badgeIso');
+        let badgeTot = document.getElementById('badgeTotal');
+
+        filaPol.classList.remove('row-base-highlight');
+        filaIso.classList.remove('row-base-highlight');
+        filaTot.classList.remove('row-base-highlight');
+
+        badgePol.className = 'tag-role tag-calc'; badgePol.innerText = 'CALCULADO';
+        badgeIso.className = 'tag-role tag-calc'; badgeIso.innerText = 'CALCULADO';
+        badgeTot.className = 'tag-role tag-calc'; badgeTot.innerText = 'CALCULADO';
+
+        if (modo === 'poliol') {
+            filaPol.classList.add('row-base-highlight');
+            badgePol.className = 'tag-role tag-base'; badgePol.innerText = 'DATO BASE';
+        } else if (modo === 'isocianato') {
+            filaIso.classList.add('row-base-highlight');
+            badgeIso.className = 'tag-role tag-base'; badgeIso.innerText = 'DATO BASE';
+        } else {
+            filaTot.classList.add('row-base-highlight');
+            badgeTot.className = 'tag-role tag-base'; badgeTot.innerText = 'DATO BASE';
+        }
     }
 
     function calculateFromParts() {
@@ -574,6 +690,8 @@
             mPol = (p / suma) * totalMezcla;
             mIso = (i / suma) * totalMezcla;
         }
+
+        actualizarIndicadoresVisuales(p, i, modo, cantBase, unidad);
 
         document.getElementById('resPoliol').innerText = mPol.toFixed(2) + " " + unidad;
         document.getElementById('resIso').innerText = mIso.toFixed(2) + " " + unidad;
