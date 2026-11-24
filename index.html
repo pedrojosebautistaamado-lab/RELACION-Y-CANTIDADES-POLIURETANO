@@ -158,7 +158,15 @@
         </div>
         <div class="form-grid" style="margin-top: 10px;">
             <div class="input-group">
-                <label>Cantidad Total Lote Requerido</label>
+                <label>Base de Cálculo de Dosificación</label>
+                <select id="modoDosificacion" onchange="actualizarModoDosificacion()">
+                    <option value="total" selected>A partir del Total Requerido</option>
+                    <option value="poliol">A partir de cantidad fija de Poliol</option>
+                    <option value="isocianato">A partir de cantidad fija de Isocianato</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label id="labelCantidadBase">Cantidad Total Lote Requerido</label>
                 <input type="number" id="totalMasa" value="10" step="0.5" oninput="calculateBatch()">
             </div>
             <div class="input-group">
@@ -457,6 +465,19 @@
         calculateFromParts();
     }
 
+    function actualizarModoDosificacion() {
+        let modo = document.getElementById('modoDosificacion').value;
+        let label = document.getElementById('labelCantidadBase');
+        if (modo === 'poliol') {
+            label.innerText = "Cantidad Disponible de Poliol";
+        } else if (modo === 'isocianato') {
+            label.innerText = "Cantidad Disponible de Isocianato";
+        } else {
+            label.innerText = "Cantidad Total Lote Requerido";
+        }
+        calculateBatch();
+    }
+
     function calculateFromParts() {
         let p = parseFloat(document.getElementById('partPoliol').value) || 100;
         let i = parseFloat(document.getElementById('partIso').value) || 0;
@@ -529,16 +550,34 @@
     function calculateBatch() {
         let p = parseFloat(document.getElementById('partPoliol').value) || 100;
         let i = parseFloat(document.getElementById('partIso').value) || 120;
-        let totalMasa = parseFloat(document.getElementById('totalMasa').value) || 0;
+        let cantBase = parseFloat(document.getElementById('totalMasa').value) || 0;
         let unidad = document.getElementById('unidadMasa').value;
+        let modo = document.getElementById('modoDosificacion').value;
         let suma = p + i;
-        if(suma <= 0) return;
-        let mPol = (p / suma) * totalMasa;
-        let mIso = (i / suma) * totalMasa;
+        if (suma <= 0 || p <= 0) return;
+
+        let relIsoPol = i / p;
+        let mPol = 0;
+        let mIso = 0;
+        let totalMezcla = 0;
+
+        if (modo === 'poliol') {
+            mPol = cantBase;
+            mIso = mPol * relIsoPol;
+            totalMezcla = mPol + mIso;
+        } else if (modo === 'isocianato') {
+            mIso = cantBase;
+            mPol = relIsoPol > 0 ? (mIso / relIsoPol) : 0;
+            totalMezcla = mPol + mIso;
+        } else {
+            totalMezcla = cantBase;
+            mPol = (p / suma) * totalMezcla;
+            mIso = (i / suma) * totalMezcla;
+        }
 
         document.getElementById('resPoliol').innerText = mPol.toFixed(2) + " " + unidad;
         document.getElementById('resIso').innerText = mIso.toFixed(2) + " " + unidad;
-        document.getElementById('resTotal').innerText = totalMasa.toFixed(2) + " " + unidad;
+        document.getElementById('resTotal').innerText = totalMezcla.toFixed(2) + " " + unidad;
 
         // Conversión a Kilogramos base para cálculo exacto de tambores
         let mPolKg = unidad === 'lb' ? mPol * 0.453592 : (unidad === 'g' ? mPol / 1000 : mPol);
