@@ -788,4 +788,370 @@
 
     function calculateFromPctPoliol() {
         let pctP = parseFloat(document.getElementById('pctPoliol').value) || 0;
-        if (pctP <= 0) pctP = 1; if (pct
+        if (pctP <= 0) pctP = 1; if (pctP >= 100) pctP = 99;
+        let pctI = 100 - pctP;
+        document.getElementById('pctIso').value = pctI.toFixed(2);
+        let p = 100, i = (pctI * p) / pctP;
+        document.getElementById('partPoliol').value = 100;
+        document.getElementById('partIso').value = i.toFixed(2);
+        document.getElementById('ratioIsoPol').value = (i / p).toFixed(3);
+        document.getElementById('ratioPolIso').value = (p / i).toFixed(3);
+        calculateBatch();
+    }
+
+    function calculateFromPctIso() {
+        let pctI = parseFloat(document.getElementById('pctIso').value) || 0;
+        if (pctI <= 0) pctI = 1; if (pctI >= 100) pctI = 99;
+        let pctP = 100 - pctI;
+        document.getElementById('pctPoliol').value = pctP.toFixed(2);
+        let p = 100, i = (pctI * p) / pctP;
+        document.getElementById('partPoliol').value = 100;
+        document.getElementById('partIso').value = i.toFixed(2);
+        document.getElementById('ratioIsoPol').value = (i / p).toFixed(3);
+        document.getElementById('ratioPolIso').value = (p / i).toFixed(3);
+        calculateBatch();
+    }
+
+    function calculateBatch() {
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        let cantBase = parseFloat(document.getElementById('totalMasa').value) || 0;
+        let unidad = document.getElementById('unidadMasa').value;
+        let modo = document.getElementById('modoDosificacion').value;
+        let suma = p + i;
+        if (suma <= 0 || p <= 0) return;
+
+        let relIsoPol = i / p;
+        let mPol = 0;
+        let mIso = 0;
+        let totalMezcla = 0;
+
+        if (modo === 'poliol') {
+            mPol = cantBase;
+            mIso = mPol * relIsoPol;
+            totalMezcla = mPol + mIso;
+        } else if (modo === 'isocianato') {
+            mIso = cantBase;
+            mPol = relIsoPol > 0 ? (mIso / relIsoPol) : 0;
+            totalMezcla = mPol + mIso;
+        } else {
+            totalMezcla = cantBase;
+            mPol = (p / suma) * totalMezcla;
+            mIso = (i / suma) * totalMezcla;
+        }
+
+        actualizarIndicadoresVisuales(p, i, modo, cantBase, unidad);
+
+        document.getElementById('resPoliol').innerText = mPol.toFixed(2) + " " + unidad;
+        document.getElementById('resIso').innerText = mIso.toFixed(2) + " " + unidad;
+        document.getElementById('resTotal').innerText = totalMezcla.toFixed(2) + " " + unidad;
+
+        let mPolKg = unidad === 'lb' ? mPol * 0.453592 : (unidad === 'g' ? mPol / 1000 : mPol);
+        let mIsoKg = unidad === 'lb' ? mIso * 0.453592 : (unidad === 'g' ? mIso / 1000 : mIso);
+
+        let tamboresPol = mPolKg / 230;
+        let tamboresIso = mIsoKg / 250;
+
+        document.getElementById('resTamboresPol').innerText = tamboresPol.toFixed(2) + " tambores";
+        document.getElementById('resTamboresIso').innerText = tamboresIso.toFixed(2) + " tambores";
+
+        if (!calObjManual) {
+            sincronizarRelacionModulo1ACalibracion(false);
+        }
+
+        calcPanel();
+        calcFurgon();
+        calcTuberia();
+    }
+
+    /* RELACIONES OBJETIVO EN CALIBRACIÓN DE MÁQUINA */
+    function sincronizarRelacionModulo1ACalibracion(forzar) {
+        if (forzar) calObjManual = false;
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        document.getElementById('cal_obj_part_pol').value = p;
+        document.getElementById('cal_obj_part_iso').value = i;
+        calObjFromParts(true);
+        let badge = document.getElementById('cal_obj_sync_status');
+        if (badge) badge.innerText = "Enlazada con Módulo 1";
+    }
+
+    function traerRelacionDeModulo1() {
+        sincronizarRelacionModulo1ACalibracion(true);
+    }
+
+    function marcarCalObjManual() {
+        calObjManual = true;
+        let badge = document.getElementById('cal_obj_sync_status');
+        if (badge) badge.innerText = "Editada manualmente";
+    }
+
+    function calObjFromParts(esAuto) {
+        if (!esAuto) marcarCalObjManual();
+        let p = parseFloat(document.getElementById('cal_obj_part_pol').value) || 100;
+        let i = parseFloat(document.getElementById('cal_obj_part_iso').value) || 0;
+        if (p <= 0) p = 1;
+        let rIsoPol = i / p;
+        let rPolIso = p / (i || 1);
+        let total = p + i;
+        document.getElementById('cal_obj_ratio_iso').value = rIsoPol.toFixed(3);
+        document.getElementById('cal_obj_ratio_pol').value = rPolIso.toFixed(3);
+        document.getElementById('cal_obj_pct_pol').value = ((p / total) * 100).toFixed(2);
+        document.getElementById('cal_obj_pct_iso').value = ((i / total) * 100).toFixed(2);
+        calcCalibracion();
+    }
+
+    function calObjFromRatioPol() {
+        marcarCalObjManual();
+        let rPolIso = parseFloat(document.getElementById('cal_obj_ratio_pol').value) || 0;
+        if (rPolIso <= 0) return;
+        let rIsoPol = 1 / rPolIso;
+        document.getElementById('cal_obj_ratio_iso').value = rIsoPol.toFixed(3);
+        let p = 100, i = p * rIsoPol;
+        document.getElementById('cal_obj_part_pol').value = 100;
+        document.getElementById('cal_obj_part_iso').value = i.toFixed(2);
+        let total = p + i;
+        document.getElementById('cal_obj_pct_pol').value = ((p / total) * 100).toFixed(2);
+        document.getElementById('cal_obj_pct_iso').value = ((i / total) * 100).toFixed(2);
+        calcCalibracion();
+    }
+
+    function calObjFromRatioIso() {
+        marcarCalObjManual();
+        let rIsoPol = parseFloat(document.getElementById('cal_obj_ratio_iso').value) || 0;
+        if (rIsoPol <= 0) return;
+        let rPolIso = 1 / rIsoPol;
+        document.getElementById('cal_obj_ratio_pol').value = rPolIso.toFixed(3);
+        let p = 100, i = p * rIsoPol;
+        document.getElementById('cal_obj_part_pol').value = 100;
+        document.getElementById('cal_obj_part_iso').value = i.toFixed(2);
+        let total = p + i;
+        document.getElementById('cal_obj_pct_pol').value = ((p / total) * 100).toFixed(2);
+        document.getElementById('cal_obj_pct_iso').value = ((i / total) * 100).toFixed(2);
+        calcCalibracion();
+    }
+
+    function calObjFromPctPol() {
+        marcarCalObjManual();
+        let pctP = parseFloat(document.getElementById('cal_obj_pct_pol').value) || 0;
+        if (pctP <= 0) pctP = 1; if (pctP >= 100) pctP = 99;
+        let pctI = 100 - pctP;
+        document.getElementById('cal_obj_pct_iso').value = pctI.toFixed(2);
+        let p = 100, i = (pctI * p) / pctP;
+        document.getElementById('cal_obj_part_pol').value = 100;
+        document.getElementById('cal_obj_part_iso').value = i.toFixed(2);
+        document.getElementById('cal_obj_ratio_iso').value = (i / p).toFixed(3);
+        document.getElementById('cal_obj_ratio_pol').value = (p / i).toFixed(3);
+        calcCalibracion();
+    }
+
+    function calObjFromPctIso() {
+        marcarCalObjManual();
+        let pctI = parseFloat(document.getElementById('cal_obj_pct_iso').value) || 0;
+        if (pctI <= 0) pctI = 1; if (pctI >= 100) pctI = 99;
+        let pctP = 100 - pctI;
+        document.getElementById('cal_obj_pct_pol').value = pctP.toFixed(2);
+        let p = 100, i = (pctI * p) / pctP;
+        document.getElementById('cal_obj_part_pol').value = 100;
+        document.getElementById('cal_obj_part_iso').value = i.toFixed(2);
+        document.getElementById('cal_obj_ratio_iso').value = (i / p).toFixed(3);
+        document.getElementById('cal_obj_ratio_pol').value = (p / i).toFixed(3);
+        calcCalibracion();
+    }
+
+    function calcCalibracion() {
+        let t = parseFloat(document.getElementById('cal_tiempo').value) || 1;
+        if (t <= 0) t = 1;
+        let gPol = parseFloat(document.getElementById('cal_gramos_pol').value) || 0;
+        let gIso = parseFloat(document.getElementById('cal_gramos_iso').value) || 0;
+        let targetRatioIsoPol = parseFloat(document.getElementById('cal_obj_ratio_iso').value) || 1.2;
+        let targetRatioPolIso = parseFloat(document.getElementById('cal_obj_ratio_pol').value) || (1 / targetRatioIsoPol);
+        let targetPartPol = parseFloat(document.getElementById('cal_obj_part_pol').value) || 100;
+        let targetPartIso = parseFloat(document.getElementById('cal_obj_part_iso').value) || (targetPartPol * targetRatioIsoPol);
+        let targetPctPol = parseFloat(document.getElementById('cal_obj_pct_pol').value) || ((targetPartPol / (targetPartPol + targetPartIso)) * 100);
+        let targetPctIso = parseFloat(document.getElementById('cal_obj_pct_iso').value) || ((targetPartIso / (targetPartPol + targetPartIso)) * 100);
+        let objResEl = document.getElementById('cal_obj_resumen');
+        if (objResEl) {
+            objResEl.innerHTML = `${targetPartPol} : ${Number(targetPartIso).toFixed(1)} &nbsp;·&nbsp; Iso/Pol ${targetRatioIsoPol.toFixed(3)} &nbsp;·&nbsp; Pol/Iso ${targetRatioPolIso.toFixed(3)} &nbsp;·&nbsp; ${Number(targetPctPol).toFixed(1)}% Pol / ${Number(targetPctIso).toFixed(1)}% Iso`;
+        }
+
+        let cPolGps = gPol / t;
+        let cIsoGps = gIso / t;
+        let cTotalGps = cPolGps + cIsoGps;
+        ultimoCaudalTotalGps = cTotalGps;
+
+        let relIsoPol = gPol > 0 ? (gIso / gPol) : 0;
+        let relPolIso = gIso > 0 ? (gPol / gIso) : 0;
+        let totalGramos = gPol + gIso;
+
+        document.getElementById('cal_caudal_pol').innerText = cPolGps.toFixed(1) + " g/s (" + (cPolGps*60/1000).toFixed(2) + " kg/min)";
+        document.getElementById('cal_caudal_iso').innerText = cIsoGps.toFixed(1) + " g/s (" + (cIsoGps*60/1000).toFixed(2) + " kg/min)";
+        document.getElementById('cal_caudal_total').innerText = cTotalGps.toFixed(1) + " g/s (" + (cTotalGps*60/1000).toFixed(2) + " kg/min)";
+
+        document.getElementById('cal_rel_partes').innerText = "100 Poliol : " + (relIsoPol * 100).toFixed(1) + " Iso";
+        document.getElementById('cal_rel_dec_pol').innerText = relPolIso.toFixed(3);
+        document.getElementById('cal_rel_dec_iso').innerText = relIsoPol.toFixed(3);
+        document.getElementById('cal_rel_pct').innerText = totalGramos > 0 ? ((gPol/totalGramos)*100).toFixed(1) + "% Pol / " + ((gIso/totalGramos)*100).toFixed(1) + "% Iso" : "--";
+
+        let gIsoTeorico = gPol * targetRatioIsoPol;
+        let diffGramos = gIso - gIsoTeorico;
+        let diffPct = gIsoTeorico > 0 ? (Math.abs(diffGramos) / gIsoTeorico) * 100 : 0;
+
+        let recText = "";
+        if (Math.abs(diffGramos) < 5) {
+            recText = "¡Máquina perfectamente calibrada! (Desvío menor a 5g).";
+        } else if (diffGramos > 0) {
+            recText = "Bajar bomba de Isocianato en ~" + Math.abs(diffGramos).toFixed(0) + "g (" + diffPct.toFixed(1) + "%) para lograr Iso/Pol = " + targetRatioIsoPol.toFixed(3);
+        } else {
+            recText = "Subir bomba de Isocianato en ~" + Math.abs(diffGramos).toFixed(0) + "g (" + diffPct.toFixed(1) + "%) para lograr Iso/Pol = " + targetRatioIsoPol.toFixed(3);
+        }
+        document.getElementById('cal_recomendacion').innerText = recText;
+
+        if (!panelCaudalManual) {
+            document.getElementById('p_caudal_gps').value = cTotalGps.toFixed(1);
+            document.getElementById('p_caudal_origen').value = `Enlazado con Módulo 2 (${cTotalGps.toFixed(1)} g/s)`;
+        }
+        calcPanel();
+    }
+
+    function onManualCaudalPanel() {
+        panelCaudalManual = true;
+        document.getElementById('p_caudal_origen').value = "Ingresado manualmente";
+        calcPanel();
+    }
+
+    function sincronizarCaudalPanel() {
+        panelCaudalManual = false;
+        document.getElementById('p_caudal_gps').value = ultimoCaudalTotalGps.toFixed(1);
+        document.getElementById('p_caudal_origen').value = `Enlazado con Módulo 2 (${ultimoCaudalTotalGps.toFixed(1)} g/s)`;
+        calcPanel();
+    }
+
+    function calcPanel() {
+        let l = parseFloat(document.getElementById('p_largo').value) || 0;
+        let h = parseFloat(document.getElementById('p_alto').value) || 0;
+        let esp = parseFloat(document.getElementById('p_espesor').value) || 0;
+        let dens = parseFloat(document.getElementById('p_dens').value) || 0;
+        let caudalGps = parseFloat(document.getElementById('p_caudal_gps').value) || 0;
+
+        let vol = l * h * esp;
+        let masa = vol * dens;
+        let masaGramos = masa * 1000;
+
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        let suma = p + i;
+        let mPol = suma > 0 ? (p / suma) * masa : 0;
+        let mIso = suma > 0 ? (i / suma) * masa : 0;
+
+        document.getElementById('p_vol').innerText = vol.toFixed(4) + " m³";
+        document.getElementById('p_masa').innerText = masa.toFixed(2) + " kg (" + masaGramos.toFixed(0) + " g)";
+        document.getElementById('p_pol').innerText = mPol.toFixed(2) + " kg";
+        document.getElementById('p_iso').innerText = mIso.toFixed(2) + " kg";
+
+        if (caudalGps > 0 && masaGramos > 0) {
+            let segundos = masaGramos / caudalGps;
+            let mins = Math.floor(segundos / 60);
+            let segRest = segundos % 60;
+            let textoTiempo = segundos.toFixed(2) + " seg";
+            if (mins >= 1) {
+                textoTiempo += ` (${mins} min ${segRest.toFixed(1)} s)`;
+            }
+            document.getElementById('p_tiempo_iny').innerText = textoTiempo;
+        } else {
+            document.getElementById('p_tiempo_iny').innerText = "Ingrese caudal > 0 g/s";
+        }
+    }
+
+    function calcFurgon() {
+        let l = parseFloat(document.getElementById('f_largo').value) || 0;
+        let h = parseFloat(document.getElementById('f_alto').value) || 0;
+        let a = parseFloat(document.getElementById('f_ancho').value) || 0;
+        let esp = parseFloat(document.getElementById('f_espesor').value) || 0;
+        let dens = parseFloat(document.getElementById('f_dens').value) || 0;
+
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        let suma = p + i;
+
+        let volStruct = (2 * l * h * esp) + (2 * l * a * esp) + (a * h * esp);
+        let masaStruct = volStruct * dens;
+        let polStruct = suma > 0 ? (p / suma) * masaStruct : 0;
+        let isoStruct = suma > 0 ? (i / suma) * masaStruct : 0;
+
+        let volPuertas = a * h * esp;
+        let masaPuertas = volPuertas * dens;
+        let polPuertas = suma > 0 ? (p / suma) * masaPuertas : 0;
+        let isoPuertas = suma > 0 ? (i / suma) * masaPuertas : 0;
+
+        let volTotal = volStruct + volPuertas;
+        let masaTotal = masaStruct + masaPuertas;
+        let polTotal = polStruct + polPuertas;
+        let isoTotal = isoStruct + isoPuertas;
+
+        document.getElementById('f_vol_struct').innerText = volStruct.toFixed(4) + " m³";
+        document.getElementById('f_masa_struct').innerText = masaStruct.toFixed(2) + " kg";
+        document.getElementById('f_pol_struct').innerText = polStruct.toFixed(2) + " kg";
+        document.getElementById('f_iso_struct').innerText = isoStruct.toFixed(2) + " kg";
+
+        document.getElementById('f_vol_puertas').innerText = volPuertas.toFixed(4) + " m³";
+        document.getElementById('f_masa_puertas').innerText = masaPuertas.toFixed(2) + " kg";
+        document.getElementById('f_pol_puertas').innerText = polPuertas.toFixed(2) + " kg";
+        document.getElementById('f_iso_puertas').innerText = isoPuertas.toFixed(2) + " kg";
+
+        document.getElementById('f_vol_total').innerText = volTotal.toFixed(4) + " m³";
+        document.getElementById('f_masa_total').innerText = masaTotal.toFixed(2) + " kg";
+        document.getElementById('f_pol_total').innerText = polTotal.toFixed(2) + " kg";
+        document.getElementById('f_iso_total').innerText = isoTotal.toFixed(2) + " kg";
+    }
+
+    function calcTuberia() {
+        let long = parseFloat(document.getElementById('t_long').value) || 0;
+        let diamPulg = parseFloat(document.getElementById('t_diam').value) || 0;
+        let espPulg = parseFloat(document.getElementById('t_esp').value) || 0;
+        let dens = parseFloat(document.getElementById('t_dens').value) || 0;
+
+        let rInt = (diamPulg * 0.0254) / 2;
+        let rExt = rInt + (espPulg * 0.0254);
+        let diamExtPulg = (rExt * 2) / 0.0254;
+
+        let vol = Math.PI * (Math.pow(rExt, 2) - Math.pow(rInt, 2)) * long;
+        let masa = vol * dens;
+
+        let p = parseFloat(document.getElementById('partPoliol').value) || 100;
+        let i = parseFloat(document.getElementById('partIso').value) || 120;
+        let suma = p + i;
+        let mPol = suma > 0 ? (p / suma) * masa : 0;
+        let mIso = suma > 0 ? (i / suma) * masa : 0;
+
+        document.getElementById('t_diam_ext').innerText = diamExtPulg.toFixed(2) + '" (' + (rExt * 2).toFixed(4) + ' m)';
+        document.getElementById('t_vol').innerText = vol.toFixed(5) + " m³";
+        document.getElementById('t_masa').innerText = masa.toFixed(3) + " kg";
+        document.getElementById('t_pol').innerText = mPol.toFixed(3) + " kg";
+        document.getElementById('t_iso').innerText = mIso.toFixed(3) + " kg";
+    }
+
+    function calcConvPoliol() {
+        let gal = parseFloat(document.getElementById('conv_gal_pol').value) || 0;
+        document.getElementById('conv_kg_pol').value = (gal * (230 / 55)).toFixed(1);
+    }
+    function calcConvPoliolKg() {
+        let kg = parseFloat(document.getElementById('conv_kg_pol').value) || 0;
+        document.getElementById('conv_gal_pol').value = (kg * (55 / 230)).toFixed(1);
+    }
+    function calcConvIso() {
+        let gal = parseFloat(document.getElementById('conv_gal_iso').value) || 0;
+        document.getElementById('conv_kg_iso').value = (gal * (250 / 55)).toFixed(1);
+    }
+    function calcConvIsoKg() {
+        let kg = parseFloat(document.getElementById('conv_kg_iso').value) || 0;
+        document.getElementById('conv_gal_iso').value = (kg * (55 / 250)).toFixed(1);
+    }
+
+    window.onload = function() {
+        calculateFromParts();
+        calcCalibracion();
+    };
+</script>
+</body>
+</html>
