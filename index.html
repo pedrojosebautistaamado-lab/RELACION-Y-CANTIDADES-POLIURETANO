@@ -924,9 +924,11 @@
         let targetRatioPolIso = parseFloat(document.getElementById('cal_obj_ratio_pol').value) || (1 / targetRatioIsoPol);
         let targetPartPol = parseFloat(document.getElementById('cal_obj_part_pol').value) || 100;
         let targetPartIso = parseFloat(document.getElementById('cal_obj_part_iso').value) || (targetPartPol * targetRatioIsoPol);
+        let targetPctPol = parseFloat(document.getElementById('cal_obj_pct_pol').value) || ((targetPartPol / (targetPartPol + targetPartIso)) * 100);
+        let targetPctIso = parseFloat(document.getElementById('cal_obj_pct_iso').value) || ((targetPartIso / (targetPartPol + targetPartIso)) * 100);
         let objResEl = document.getElementById('cal_obj_resumen');
         if (objResEl) {
-            objResEl.innerText = `${targetPartPol} : ${Number(targetPartIso).toFixed(1)} | Iso/Pol = ${targetRatioIsoPol.toFixed(3)} | Pol/Iso = ${targetRatioPolIso.toFixed(3)}`;
+            objResEl.innerText = `${targetPartPol} : ${Number(targetPartIso).toFixed(1)} | Iso/Pol = ${targetRatioIsoPol.toFixed(3)} | Pol/Iso = ${targetRatioPolIso.toFixed(3)} | ${Number(targetPctPol).toFixed(1)}% Pol / ${Number(targetPctIso).toFixed(1)}% Iso`;
         }
 
         let cPolGps = gPol / t;
