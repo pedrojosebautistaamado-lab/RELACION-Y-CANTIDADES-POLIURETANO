@@ -325,8 +325,8 @@
 
         <div class="sub-panel-box">
             <div class="sub-panel-title">
-                <span>B. Relación Objetivo Ficha Técnica (Editable en cualquier formato)</span>
-                <button class="sync-btn" onclick="traerRelacionDeModulo1()">⇄ Traer de Módulo 1</button>
+                <span>B. Relación Objetivo Ficha Técnica (<span id="cal_obj_sync_status" style="color:#1d4ed8;">Enlazada con Módulo 1</span>)</span>
+                <button class="sync-btn" onclick="traerRelacionDeModulo1()">⇄ Sincronizar Módulo 1</button>
             </div>
             <div class="form-grid" style="margin-bottom: 8px;">
                 <div class="input-group">
@@ -375,11 +375,15 @@
                 <span id="cal_caudal_total">--</span>
             </div>
             <div style="border-top: 1px solid #bbf7d0; margin: 8px 0; padding-top: 6px;">
-                <h3 style="font-size: 0.85rem; color: #166534; margin-bottom: 4px;">4 Formas de Expresar la Relación Real Medida:</h3>
-                <div class="result-row"><span>1. Partes (100 Poliol : X Iso):</span><span id="cal_rel_partes">--</span></div>
-                <div class="result-row"><span>2. Decimal (Poliol / Iso):</span><span id="cal_rel_dec_pol">--</span></div>
-                <div class="result-row"><span>3. Decimal (Iso / Poliol):</span><span id="cal_rel_dec_iso">--</span></div>
-                <div class="result-row"><span>4. Porcentaje (% Pol / % Iso):</span><span id="cal_rel_pct">--</span></div>
+                <h3 style="font-size: 0.85rem; color: #1e3a8a; margin-bottom: 4px;">Relación Objetivo Activa (Ficha Técnica):</h3>
+                <div class="result-row" style="background:#eff6ff;"><span>Meta Seleccionada:</span><span id="cal_obj_resumen" style="color:#1e3a8a;">--</span></div>
+            </div>
+            <div style="border-top: 1px solid #bbf7d0; margin: 8px 0; padding-top: 6px;">
+                <h3 style="font-size: 0.85rem; color: #166534; margin-bottom: 4px;">4 Formas de la Relación Real Medida en Báscula (Bloque A):</h3>
+                <div class="result-row"><span>1. Partes Medida (100 Poliol : X Iso):</span><span id="cal_rel_partes">--</span></div>
+                <div class="result-row"><span>2. Decimal Medida (Poliol / Iso):</span><span id="cal_rel_dec_pol">--</span></div>
+                <div class="result-row"><span>3. Decimal Medida (Iso / Poliol):</span><span id="cal_rel_dec_iso">--</span></div>
+                <div class="result-row"><span>4. Porcentaje Medido (% Pol / % Iso):</span><span id="cal_rel_pct">--</span></div>
             </div>
             <div class="result-row" style="border-top: 2px solid #166534; padding-top: 6px; margin-top: 6px;">
                 <span>Recomendación de Ajuste:</span>
@@ -522,7 +526,7 @@
             <button class="back-btn" onclick="irAlMenu()">← Volver al Menú</button>
         </div>
         <div class="tech-info-box">
-            <strong>Geometría de Ánulo Cilíndrico:</strong> Calcula el volumen entre el diámetro exterior de la tubería base (<strong>Ø<sub>int</sub></strong>) y el diámetro total aislado (<strong>Ø<sub>ext</sub> = Ø<sub>int</sub> + 2 × Espesor</strong>).
+            <strong>Geometría de Anillo de Aislamiento:</strong> Calcula el volumen de espuma entre el diámetro del tubo base (<strong>Ø<sub>tubo</sub></strong>) y el diámetro total ya aislado (<strong>Ø<sub>total</sub> = Ø<sub>tubo</sub> + 2 × Espesor</strong>).
         </div>
         <div class="form-grid">
             <div class="input-group">
@@ -603,6 +607,7 @@
 
 <script>
     let panelCaudalManual = false;
+    let calObjManual = false;
     let ultimoCaudalTotalGps = 440;
 
     function mostrarSeccion(idSeccion) {
@@ -806,21 +811,39 @@
         document.getElementById('resTamboresPol').innerText = tamboresPol.toFixed(2) + " tambores";
         document.getElementById('resTamboresIso').innerText = tamboresIso.toFixed(2) + " tambores";
 
+        if (!calObjManual) {
+            sincronizarRelacionModulo1ACalibracion(false);
+        }
+
         calcPanel();
         calcFurgon();
         calcTuberia();
     }
 
     /* RELACIONES OBJETIVO EN CALIBRACIÓN DE MÁQUINA */
-    function traerRelacionDeModulo1() {
+    function sincronizarRelacionModulo1ACalibracion(forzar) {
+        if (forzar) calObjManual = false;
         let p = parseFloat(document.getElementById('partPoliol').value) || 100;
         let i = parseFloat(document.getElementById('partIso').value) || 120;
         document.getElementById('cal_obj_part_pol').value = p;
         document.getElementById('cal_obj_part_iso').value = i;
-        calObjFromParts();
+        calObjFromParts(true);
+        let badge = document.getElementById('cal_obj_sync_status');
+        if (badge) badge.innerText = "Enlazada con Módulo 1";
     }
 
-    function calObjFromParts() {
+    function traerRelacionDeModulo1() {
+        sincronizarRelacionModulo1ACalibracion(true);
+    }
+
+    function marcarCalObjManual() {
+        calObjManual = true;
+        let badge = document.getElementById('cal_obj_sync_status');
+        if (badge) badge.innerText = "Editada manualmente";
+    }
+
+    function calObjFromParts(esAuto) {
+        if (!esAuto) marcarCalObjManual();
         let p = parseFloat(document.getElementById('cal_obj_part_pol').value) || 100;
         let i = parseFloat(document.getElementById('cal_obj_part_iso').value) || 0;
         if (p <= 0) p = 1;
@@ -835,6 +858,7 @@
     }
 
     function calObjFromRatioPol() {
+        marcarCalObjManual();
         let rPolIso = parseFloat(document.getElementById('cal_obj_ratio_pol').value) || 0;
         if (rPolIso <= 0) return;
         let rIsoPol = 1 / rPolIso;
@@ -849,6 +873,7 @@
     }
 
     function calObjFromRatioIso() {
+        marcarCalObjManual();
         let rIsoPol = parseFloat(document.getElementById('cal_obj_ratio_iso').value) || 0;
         if (rIsoPol <= 0) return;
         let rPolIso = 1 / rIsoPol;
@@ -863,6 +888,7 @@
     }
 
     function calObjFromPctPol() {
+        marcarCalObjManual();
         let pctP = parseFloat(document.getElementById('cal_obj_pct_pol').value) || 0;
         if (pctP <= 0) pctP = 1; if (pctP >= 100) pctP = 99;
         let pctI = 100 - pctP;
@@ -876,6 +902,7 @@
     }
 
     function calObjFromPctIso() {
+        marcarCalObjManual();
         let pctI = parseFloat(document.getElementById('cal_obj_pct_iso').value) || 0;
         if (pctI <= 0) pctI = 1; if (pctI >= 100) pctI = 99;
         let pctP = 100 - pctI;
@@ -894,6 +921,13 @@
         let gPol = parseFloat(document.getElementById('cal_gramos_pol').value) || 0;
         let gIso = parseFloat(document.getElementById('cal_gramos_iso').value) || 0;
         let targetRatioIsoPol = parseFloat(document.getElementById('cal_obj_ratio_iso').value) || 1.2;
+        let targetRatioPolIso = parseFloat(document.getElementById('cal_obj_ratio_pol').value) || (1 / targetRatioIsoPol);
+        let targetPartPol = parseFloat(document.getElementById('cal_obj_part_pol').value) || 100;
+        let targetPartIso = parseFloat(document.getElementById('cal_obj_part_iso').value) || (targetPartPol * targetRatioIsoPol);
+        let objResEl = document.getElementById('cal_obj_resumen');
+        if (objResEl) {
+            objResEl.innerText = `${targetPartPol} : ${Number(targetPartIso).toFixed(1)} | Iso/Pol = ${targetRatioIsoPol.toFixed(3)} | Pol/Iso = ${targetRatioPolIso.toFixed(3)}`;
+        }
 
         let cPolGps = gPol / t;
         let cIsoGps = gIso / t;
